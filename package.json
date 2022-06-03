@@ -1,11 +1,11 @@
 {
-  "name": "ecommerce-mern",
+  "name": "carolinedambrosiodesigns.com",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
   "scripts": {
-    "build": "cd backend-dambrosio-designs && npm install  && cd ../frontend-dambrosio-designs && npm install && npm run build",
-    "start": "node backend-dambrosio-designs/server.js",
+    "build": "cd backend && npm install  && cd ../frontend && npm install && npm run build",
+    "start": "node backend/server.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
