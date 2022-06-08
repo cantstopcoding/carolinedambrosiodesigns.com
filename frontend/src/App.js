@@ -41,15 +41,15 @@ function App() {
   const [categories, setCategories] = useState([]);
 
   useEffect(() => {
-    const fetchCatagories = async () => {
+    const fetchCategories = async () => {
       try {
-        const { data } = await axios.get('/api/products/categories');
+        const { data } = await axios.get(`/api/products/categories`);
         setCategories(data);
       } catch (err) {
         toast.error(getError(err));
       }
     };
-    fetchCatagories();
+    fetchCategories();
   }, []);
 
   return (
