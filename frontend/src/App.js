@@ -24,6 +24,7 @@ import ProfileScreen from './screens/ProfileScreen';
 import { Button } from 'react-bootstrap';
 import { getError } from './utils';
 import axios from 'axios';
+import SearchBox from './components/SearchBox';
 
 function App() {
   const { state, dispatch: ctxDispatch } = useContext(Store);
@@ -76,6 +77,7 @@ function App() {
               </LinkContainer>
               <Navbar.Toggle aria-controls='basic-navbar-nav' />
               <Navbar.Collapse id='basic'>
+                <SearchBox />
                 <Nav className='me-auto w-100 justify-content-end'>
                   <Link to='/cart' className='nav-link'>
                     Cart
