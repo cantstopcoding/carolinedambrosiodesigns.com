@@ -23,7 +23,7 @@ import OrderHistoryScreen from './screens/OrderHistoryScreen';
 import ProfileScreen from './screens/ProfileScreen';
 import { Button } from 'react-bootstrap';
 import { getError } from './utils';
-import axios, { AxiosError } from 'axios';
+import axios from 'axios';
 
 function App() {
   const { state, dispatch: ctxDispatch } = useContext(Store);
