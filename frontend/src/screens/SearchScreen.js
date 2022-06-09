@@ -1,6 +1,7 @@
-import React, { useEffect, useReducer } from 'react';
+import React, { useEffect, useReducer, useState } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import axios from 'axios';
+import { toast } from 'react-toastify';
 import { getError } from '../utils';
 
 export default function SearchScreen() {
@@ -54,6 +55,18 @@ export default function SearchScreen() {
     };
     fetchData();
   }, [category, error, order, page, price, query, rating]);
+
+  const [categories, setCategories] = useState([]);
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const { data } = await axios.get('/api/prroducts/categories');
+        setCategories(data);
+      } catch (err) {
+        toast.error(getError(err));
+      }
+    };
+  });
 
   return <div>SearchScreen</div>;
 }
