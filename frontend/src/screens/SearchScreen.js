@@ -159,6 +159,14 @@ export default function SearchScreen() {
                   </Link>
                 </li>
               ))}
+              <li>
+                <Link
+                  to={getFilterUrl({ rating: 'all' })}
+                  className={'all' === rating ? 'text-bold' : ''}
+                >
+                  <Rating caption={' & up'} rating={0}></Rating>
+                </Link>
+              </li>
             </ul>
           </div>
         </Col>
