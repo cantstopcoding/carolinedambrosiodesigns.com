@@ -1,5 +1,7 @@
-import React, { useReducer } from 'react';
+import React, { useEffect, useReducer } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
+import axios from 'axios';
+import { getError } from '../utils';
 
 export default function SearchScreen() {
   const navigate = useNavigate();
@@ -38,6 +40,20 @@ export default function SearchScreen() {
       loading: true,
       error: '',
     });
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const { data } = await axios.get(
+          `/api/products/search?page=${page}&query=${query}&category=${category}&price=${price}&rating=${rating}&order=${order}`
+        );
+        dispatch({ type: 'FETCH_SUCCESS', payload: data });
+      } catch (err) {
+        dispatch({ type: 'FETCH_FAIL', payload: getError(err) });
+      }
+    };
+    fetchData();
+  }, [category, error, order, page, price, query, rating]);
 
   return <div>SearchScreen</div>;
 }
