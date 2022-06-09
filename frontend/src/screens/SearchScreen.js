@@ -4,8 +4,8 @@ import axios from 'axios';
 import { toast } from 'react-toastify';
 import { getError } from '../utils';
 import { Helmet } from 'react-helmet-async';
-import Row from 'react-bootstrap/esm/Row';
-import Col from 'react-bootstrap/esm/Col';
+import Row from 'react-bootstrap/Row';
+import Col from 'react-bootstrap/Col';
 
 export default function SearchScreen() {
   const navigate = useNavigate();
@@ -97,6 +97,16 @@ export default function SearchScreen() {
                   Any
                 </Link>
               </li>
+              {categories.map((c) => (
+                <li key={c}>
+                  <Link
+                    className={c === category ? 'text-bold' : ''}
+                    to={getFilterUrl({ category: c })}
+                  >
+                    {c}
+                  </Link>
+                </li>
+              ))}
             </ul>
           </div>
         </Col>
