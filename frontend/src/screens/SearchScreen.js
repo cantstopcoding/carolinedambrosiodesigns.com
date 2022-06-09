@@ -3,6 +3,9 @@ import { Link, useNavigate, useLocation } from 'react-router-dom';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import { getError } from '../utils';
+import { Helmet } from 'react-helmet-async';
+import Row from 'react-bootstrap/esm/Row';
+import Col from 'react-bootstrap/esm/Col';
 
 export default function SearchScreen() {
   const navigate = useNavigate();
@@ -78,5 +81,26 @@ export default function SearchScreen() {
     return `/search?category=${filterCategory}&query=${filterQuery}&price=${filterPrice}&rating=${filterRating}&order=${sortOrder}&page=${filterPage}`;
   };
 
-  return <div>SearchScreen</div>;
+  return (
+    <div>
+      <Helmet>Search Products</Helmet>
+      <Row>
+        <Col>
+          <h3>Department</h3>
+          <div>
+            <ul>
+              <li>
+                <Link
+                  className={'all' === category ? 'text-bold' : ''}
+                  to={getFilterUrl({ category: 'all' })}
+                >
+                  Any
+                </Link>
+              </li>
+            </ul>
+          </div>
+        </Col>
+      </Row>
+    </div>
+  );
 }
