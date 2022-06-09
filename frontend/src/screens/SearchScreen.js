@@ -68,5 +68,15 @@ export default function SearchScreen() {
     };
   });
 
+  const getFilterUrl = (filter) => {
+    const filterPage = filter.page || page;
+    const filterCategory = filter.category || category;
+    const filterQuery = filter.query || query;
+    const filterRating = filter.rating || rating;
+    const filterPrice = filter.price || price;
+    const sortOrder = filter.order || order;
+    return `/search?category=${filterCategory}&query=${filterQuery}&price=${filterPrice}&rating=${filterRating}&order=${sortOrder}&page=${filterPage}`;
+  };
+
   return <div>SearchScreen</div>;
 }
