@@ -6,6 +6,20 @@ import { getError } from '../utils';
 import { Helmet } from 'react-helmet-async';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
+import Rating from '../components/Rating';
+
+const prices = [
+  { name: '$1 to $50', value: '1-50' },
+  { name: '$51 to $200', value: '51-200' },
+  { name: '$201 to $1000', value: '201-1000' },
+];
+
+const ratings = [
+  { name: '4stars & up', rating: 4 },
+  { name: '3stars & up', rating: 3 },
+  { name: '2stars & up', rating: 2 },
+  { name: '1star & up', rating: 1 },
+];
 
 export default function SearchScreen() {
   const navigate = useNavigate();
@@ -104,6 +118,44 @@ export default function SearchScreen() {
                     to={getFilterUrl({ category: c })}
                   >
                     {c}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+          <div>
+            <h3>Price</h3>
+            <ul>
+              <li>
+                <Link
+                  className={'all' === price ? 'text-bold' : ''}
+                  to={getFilterUrl({ price: 'all' })}
+                >
+                  Any
+                </Link>
+              </li>
+              {prices.map((p) => (
+                <li key={p.value}>
+                  <Link
+                    to={getFilterUrl({ price: p.value })}
+                    className={p.value === price ? 'text-bold' : ''}
+                  >
+                    {p.name}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+          <div>
+            <h3>Avg. Customer Review</h3>
+            <ul>
+              {ratings.map((r) => (
+                <li key={r.name}>
+                  <Link
+                    to={getFilterUrl({ rating: r.rating })}
+                    className={`${r.rating}` === `${rating}` ? 'text-bold' : ''}
+                  >
+                    <Rating caption={' & up'} rating={r.rating}></Rating>
                   </Link>
                 </li>
               ))}
