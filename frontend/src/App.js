@@ -27,6 +27,8 @@ import axios from 'axios';
 import SearchBox from './components/SearchBox';
 import SearchScreen from './screens/SearchScreen';
 import ProtectedRoute from './components/ProtectedRoute';
+import DashboardScreen from './screens/DashboardScreen';
+import AdminRoute from './components/AdminRoute';
 
 function App() {
   const { state, dispatch: ctxDispatch } = useContext(Store);
@@ -113,16 +115,16 @@ function App() {
                   )}
                   {userInfo && userInfo.isAdmin && (
                     <NavDropdown title='Admin' id='admin-nav-dropdown'>
-                      <LinkContainer to='/dashboard'>
+                      <LinkContainer to='/admin/dashboard'>
                         <NavDropdown.Item>Dashboard</NavDropdown.Item>
                       </LinkContainer>
-                      <LinkContainer to='/productlist'>
+                      <LinkContainer to='/admin/productlist'>
                         <NavDropdown.Item>Products</NavDropdown.Item>
                       </LinkContainer>
-                      <LinkContainer to='/orderlist'>
+                      <LinkContainer to='/admin/orderlist'>
                         <NavDropdown.Item>Orderlist</NavDropdown.Item>
                       </LinkContainer>
-                      <LinkContainer to='/userlist'>
+                      <LinkContainer to='/admin/userlist'>
                         <NavDropdown.Item>Users</NavDropdown.Item>
                       </LinkContainer>
                     </NavDropdown>
@@ -193,6 +195,15 @@ function App() {
                 element={<ShippingAddressScreen />}
               ></Route>
               <Route path='/payment' element={<PaymentMethodScreen />}></Route>
+              {/* Admin Routes */}
+              <Route
+                path='/admin/dashboard'
+                element={
+                  <AdminRoute>
+                    <DashboardScreen />
+                  </AdminRoute>
+                }
+              ></Route>
               <Route path='/' element={<HomeScreen />} />
             </Routes>
           </Container>
