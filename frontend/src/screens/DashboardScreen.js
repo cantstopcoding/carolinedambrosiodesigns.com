@@ -1,5 +1,10 @@
 import axios from 'axios';
 import React, { useContext, useEffect, useReducer } from 'react';
+import Col from 'react-bootstrap/Col';
+import Row from 'react-bootstrap/Row';
+import Card from 'react-bootstrap/Card';
+import LoadingBox from '../components/LoadingBox';
+import MessageBox from '../components/MessageBox';
 import { Store } from '../Store';
 import { getError } from '../utils';
 
@@ -38,5 +43,55 @@ export default function DashboardScreen() {
     fetchData();
   }, [userInfo]);
 
-  return <div>DashboardScreen</div>;
+  return (
+    <div>
+      <h1>DashboardScreen</h1>
+      {loading ? (
+        <LoadingBox />
+      ) : error ? (
+        <MessageBox variant='danger'>{error}</MessageBox>
+      ) : (
+        <>
+          <Row>
+            <Col md={4}>
+              <Card>
+                <Card.Body>
+                  <Card.Title>
+                    {summary.users && summary.users[0]
+                      ? summary.users[0].numUsers
+                      : 0}
+                  </Card.Title>
+                  <Card.Text>Users</Card.Text>
+                </Card.Body>
+              </Card>
+            </Col>
+            <Col md={4}>
+              <Card>
+                <Card.Body>
+                  <Card.Title>
+                    {summary.orders && summary.orders[0]
+                      ? summary.orders[0].numOrders
+                      : 0}
+                  </Card.Title>
+                  <Card.Text>Orders</Card.Text>
+                </Card.Body>
+              </Card>
+            </Col>
+            <Col md={4}>
+              <Card>
+                <Card.Body>
+                  <Card.Title>
+                    {summary.orders && summary.users[0]
+                      ? summary.orders[0].totalSales.toFixed(2)
+                      : 0}
+                  </Card.Title>
+                  <Card.Text>Orders</Card.Text>
+                </Card.Body>
+              </Card>
+            </Col>
+          </Row>
+        </>
+      )}
+    </div>
+  );
 }
