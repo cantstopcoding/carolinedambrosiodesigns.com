@@ -1,4 +1,5 @@
 import axios from 'axios';
+import Chart from 'react-google-charts';
 import React, { useContext, useEffect, useReducer } from 'react';
 import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
@@ -91,6 +92,23 @@ export default function DashboardScreen() {
               </Card>
             </Col>
           </Row>
+          <div className='my-3'>
+            <h2>Sales</h2>
+            {summary.dailyOrders.length === 0 ? (
+              <MessageBox>No Sale</MessageBox>
+            ) : (
+              <Chart
+                width='100%'
+                height='400px'
+                chartType='AreaChart'
+                loader={<div>Loading Chart...</div>}
+                data={[
+                  ['Date', 'Sales'],
+                  ...summary.dailyOrders.map((x) => [x._id, x.sales]),
+                ]}
+              ></Chart>
+            )}
+          </div>
         </>
       )}
     </div>
