@@ -1,27 +1,30 @@
-import axios from 'axios';
-import Chart from 'react-google-charts';
 import React, { useContext, useEffect, useReducer } from 'react';
-import Col from 'react-bootstrap/Col';
-import Row from 'react-bootstrap/Row';
-import Card from 'react-bootstrap/Card';
-import LoadingBox from '../components/LoadingBox';
-import MessageBox from '../components/MessageBox';
+import Chart from 'react-google-charts';
+import axios from 'axios';
 import { Store } from '../Store';
 import { getError } from '../utils';
+import LoadingBox from '../components/LoadingBox';
+import MessageBox from '../components/MessageBox';
+import Row from 'react-bootstrap/Row';
+import Col from 'react-bootstrap/Col';
+import Card from 'react-bootstrap/Card';
 
 const reducer = (state, action) => {
   switch (action.type) {
     case 'FETCH_REQUEST':
       return { ...state, loading: true };
     case 'FETCH_SUCCESS':
-      return { ...state, summary: action.payload, loading: false };
+      return {
+        ...state,
+        summary: action.payload,
+        loading: false,
+      };
     case 'FETCH_FAIL':
       return { ...state, loading: false, error: action.payload };
     default:
       return state;
   }
 };
-
 export default function DashboardScreen() {
   const [{ loading, summary, error }, dispatch] = useReducer(reducer, {
     loading: true,
@@ -38,7 +41,10 @@ export default function DashboardScreen() {
         });
         dispatch({ type: 'FETCH_SUCCESS', payload: data });
       } catch (err) {
-        dispatch({ type: 'FETCH_FAIL', payload: getError(err) });
+        dispatch({
+          type: 'FETCH_FAIL',
+          payload: getError(err),
+        });
       }
     };
     fetchData();
@@ -46,7 +52,7 @@ export default function DashboardScreen() {
 
   return (
     <div>
-      <h1>DashboardScreen</h1>
+      <h1>Dashboard</h1>
       {loading ? (
         <LoadingBox />
       ) : error ? (
@@ -62,7 +68,7 @@ export default function DashboardScreen() {
                       ? summary.users[0].numUsers
                       : 0}
                   </Card.Title>
-                  <Card.Text>Users</Card.Text>
+                  <Card.Text> Users</Card.Text>
                 </Card.Body>
               </Card>
             </Col>
@@ -70,11 +76,11 @@ export default function DashboardScreen() {
               <Card>
                 <Card.Body>
                   <Card.Title>
-                    {summary.orders && summary.orders[0]
+                    {summary.orders && summary.users[0]
                       ? summary.orders[0].numOrders
                       : 0}
                   </Card.Title>
-                  <Card.Text>Orders</Card.Text>
+                  <Card.Text> Orders</Card.Text>
                 </Card.Body>
               </Card>
             </Col>
@@ -87,7 +93,7 @@ export default function DashboardScreen() {
                       ? summary.orders[0].totalSales.toFixed(2)
                       : 0}
                   </Card.Title>
-                  <Card.Text>Orders</Card.Text>
+                  <Card.Text> Orders</Card.Text>
                 </Card.Body>
               </Card>
             </Col>
