@@ -18,11 +18,11 @@ const reducer = (state, action) => {
       };
     case 'FETCH_FAIL':
       return { ...state, loading: false, error: action.payload };
+
     default:
       return state;
   }
 };
-
 export default function UserListScreen() {
   const [{ loading, error, users }, dispatch] = useReducer(reducer, {
     loading: true,
@@ -35,6 +35,7 @@ export default function UserListScreen() {
   useEffect(() => {
     const fetchData = async () => {
       try {
+        dispatch({ type: 'FETCH_REQUEST' });
         const { data } = await axios.get(`/api/users`, {
           headers: { Authorization: `Bearer ${userInfo.token}` },
         });
@@ -48,7 +49,6 @@ export default function UserListScreen() {
     };
     fetchData();
   }, [userInfo]);
-
   return (
     <div>
       <Helmet>
@@ -64,8 +64,8 @@ export default function UserListScreen() {
           <thead>
             <tr>
               <th>ID</th>
-              <th>Name</th>
-              <th>Email</th>
+              <th>NAME</th>
+              <th>EMAIL</th>
               <th>IS ADMIN</th>
               <th>ACTIONS</th>
             </tr>
