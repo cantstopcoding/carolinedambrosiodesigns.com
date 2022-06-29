@@ -1,6 +1,6 @@
 import axios from 'axios';
 import React, { useContext, useEffect, useReducer } from 'react';
-import { Button } from 'react-bootstrap';
+import Button from 'react-bootstrap/Button';
 import { Helmet } from 'react-helmet-async';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
@@ -21,7 +21,6 @@ const reducer = (state, action) => {
       };
     case 'FETCH_FAIL':
       return { ...state, loading: false, error: action.payload };
-
     case 'DELETE_REQUEST':
       return { ...state, loadingDelete: true, successDelete: false };
     case 'DELETE_SUCCESS':
@@ -33,8 +32,7 @@ const reducer = (state, action) => {
     case 'DELETE_FAIL':
       return { ...state, loadingDelete: false };
     case 'DELETE_RESET':
-      return { ...state, successDelete: false, successDelete: false };
-
+      return { ...state, loadingDelete: false, successDelete: false };
     default:
       return state;
   }
@@ -70,7 +68,6 @@ export default function UserListScreen() {
     } else {
       fetchData();
     }
-    fetchData();
   }, [userInfo, successDelete]);
 
   const deleteHandler = async (user) => {
@@ -90,14 +87,14 @@ export default function UserListScreen() {
       }
     }
   };
-
   return (
     <div>
       <Helmet>
         <title>Users</title>
       </Helmet>
       <h1>Users</h1>
-      {loading && <LoadingBox></LoadingBox>}
+
+      {loadingDelete && <LoadingBox></LoadingBox>}
       {loading ? (
         <LoadingBox></LoadingBox>
       ) : error ? (
