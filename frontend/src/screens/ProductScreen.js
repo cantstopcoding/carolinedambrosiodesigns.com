@@ -157,12 +157,7 @@ function ProductScreen() {
                         variant='light'
                         onClick={() => setSelectedImage(x)}
                       >
-                        <Card.Img
-                          variant='top'
-                          src={x}
-                          alt='product'
-                          className=' '
-                        />
+                        <Card.Img variant='top' src={x} alt='product' />
                       </Button>
                     </Card>
                   </Col>
