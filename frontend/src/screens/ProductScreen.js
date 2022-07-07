@@ -1,10 +1,11 @@
 import axios from 'axios';
 import { useContext, useEffect, useReducer, useRef, useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
-import ListGroup from 'react-bootstrap/ListGroup';
 import Card from 'react-bootstrap/Card';
+import ListGroup from 'react-bootstrap/ListGroup';
+import Form from 'react-bootstrap/Form';
 import Badge from 'react-bootstrap/Badge';
 import Button from 'react-bootstrap/Button';
 import Rating from '../components/Rating';
@@ -13,8 +14,7 @@ import LoadingBox from '../components/LoadingBox';
 import MessageBox from '../components/MessageBox';
 import { getError } from '../utils';
 import { Store } from '../Store';
-import { Link } from 'react-router-dom';
-import { FloatingLabel, Form } from 'react-bootstrap';
+import FloatingLabel from 'react-bootstrap/FloatingLabel';
 import { toast } from 'react-toastify';
 
 const reducer = (state, action) => {
@@ -54,7 +54,6 @@ function ProductScreen() {
       loading: true,
       error: '',
     });
-
   useEffect(() => {
     const fetchData = async () => {
       dispatch({ type: 'FETCH_REQUEST' });
@@ -70,23 +69,21 @@ function ProductScreen() {
 
   const { state, dispatch: ctxDispatch } = useContext(Store);
   const { cart, userInfo } = state;
-
   const addToCartHandler = async () => {
     const existItem = cart.cartItems.find((x) => x._id === product._id);
     const quantity = existItem ? existItem.quantity + 1 : 1;
     const { data } = await axios.get(`/api/products/${product._id}`);
-
     if (data.countInStock < quantity) {
       window.alert('Sorry. Product is out of stock');
       return;
     }
-
     ctxDispatch({
       type: 'CART_ADD_ITEM',
       payload: { ...product, quantity },
     });
     navigate('/cart');
   };
+
   const submitHandler = async (e) => {
     e.preventDefault();
     if (!comment || !rating) {
@@ -97,8 +94,11 @@ function ProductScreen() {
       const { data } = await axios.post(
         `/api/products/${product._id}/reviews`,
         { rating, comment, name: userInfo.name },
-        { headers: { Authorization: `Bearer ${userInfo.token}` } }
+        {
+          headers: { Authorization: `Bearer ${userInfo.token}` },
+        }
       );
+
       dispatch({
         type: 'CREATE_SUCCESS',
       });
@@ -111,8 +111,8 @@ function ProductScreen() {
         behavior: 'smooth',
         top: reviewsRef.current.offsetTop,
       });
-    } catch (err) {
-      toast.error(getError(err));
+    } catch (error) {
+      toast.error(getError(error));
       dispatch({ type: 'CREATE_FAIL' });
     }
   };
@@ -144,13 +144,13 @@ function ProductScreen() {
                 numReviews={product.numReviews}
               ></Rating>
             </ListGroup.Item>
-            <ListGroup.Item>Price : ${product.price} </ListGroup.Item>
+            <ListGroup.Item>Pirce : ${product.price}</ListGroup.Item>
             <ListGroup.Item>
-              Description : <p>{product.description}</p>
+              Description:
+              <p>{product.description}</p>
             </ListGroup.Item>
           </ListGroup>
         </Col>
-
         <Col md={3}>
           <Card>
             <Card.Body>
@@ -168,11 +168,12 @@ function ProductScreen() {
                       {product.countInStock > 0 ? (
                         <Badge bg='success'>In Stock</Badge>
                       ) : (
-                        <Badge bg='danger'>Out of Stock</Badge>
+                        <Badge bg='danger'>Unavailable</Badge>
                       )}
                     </Col>
                   </Row>
                 </ListGroup.Item>
+
                 {product.countInStock > 0 && (
                   <ListGroup.Item>
                     <div className='d-grid'>
@@ -199,7 +200,7 @@ function ProductScreen() {
             <ListGroup.Item key={review._id}>
               <strong>{review.name}</strong>
               <Rating rating={review.rating} caption=' '></Rating>
-              <p>{review.createdAt.substring(9, 10)}</p>
+              <p>{review.createdAt.substring(0, 10)}</p>
               <p>{review.comment}</p>
             </ListGroup.Item>
           ))}
@@ -219,7 +220,7 @@ function ProductScreen() {
                   <option value='1'>1- Poor</option>
                   <option value='2'>2- Fair</option>
                   <option value='3'>3- Good</option>
-                  <option value='4'>4- Very Good</option>
+                  <option value='4'>4- Very good</option>
                   <option value='5'>5- Excelent</option>
                 </Form.Select>
               </Form.Group>
@@ -235,6 +236,7 @@ function ProductScreen() {
                   onChange={(e) => setComment(e.target.value)}
                 />
               </FloatingLabel>
+
               <div className='mb-3'>
                 <Button disabled={loadingCreateReview} type='submit'>
                   Submit
@@ -256,5 +258,4 @@ function ProductScreen() {
     </div>
   );
 }
-
 export default ProductScreen;
