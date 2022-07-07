@@ -42,7 +42,6 @@ productRouter.put(
     if (product) {
       product.name = req.body.name;
       product.slug = req.body.slug;
-      product.slug = req.body.slug;
       product.price = req.body.price;
       product.image = req.body.image;
       product.category = req.body.category;
@@ -84,6 +83,7 @@ productRouter.post(
           .status(400)
           .send({ message: 'You already submitted a review' });
       }
+
       const review = {
         name: req.user.name,
         rating: Number(req.body.rating),
@@ -98,7 +98,7 @@ productRouter.post(
       res.status(201).send({
         message: 'Review Created',
         review: updatedProduct.reviews[updatedProduct.reviews.length - 1],
-        numReviews: updatedProduct.numReviews,
+        numReviews: product.numReviews,
         rating: product.rating,
       });
     } else {
@@ -225,7 +225,6 @@ productRouter.get('/slug/:slug', async (req, res) => {
     res.status(404).send({ message: 'Product Not Found' });
   }
 });
-
 productRouter.get('/:id', async (req, res) => {
   const product = await Product.findById(req.params.id);
   if (product) {
