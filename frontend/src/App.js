@@ -34,6 +34,7 @@ import ProductEditScreen from './screens/ProductEditScreen';
 import OrderListScreen from './screens/OrderListScreen';
 import UserListScreen from './screens/UserListScreen';
 import UserEditScreen from './screens/UserEditScreen';
+import carolineBanner from './assets/carolineBanner.jpg';
 
 function App() {
   const { state, dispatch: ctxDispatch } = useContext(Store);
@@ -162,6 +163,12 @@ function App() {
             ))}
           </Nav>
         </div>
+        <img
+          src={`${carolineBanner}`}
+          className='img-fluid shadow-4'
+          alt='...'
+        />
+
         <main className='mt-3'>
           <Container>
             <Routes>
