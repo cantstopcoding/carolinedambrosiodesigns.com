@@ -163,11 +163,7 @@ function App() {
             ))}
           </Nav>
         </div>
-        <img
-          src={`${carolineBanner}`}
-          className='img-fluid shadow-4'
-          alt='...'
-        />
+        <img src={`${carolineBanner}`} className='img-fluid' alt='banner' />
 
         <main className='mt-3'>
           <Container>
