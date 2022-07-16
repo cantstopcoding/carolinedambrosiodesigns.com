@@ -3,7 +3,7 @@ import expressAsyncHandler from 'express-async-handler';
 import Order from '../models/orderModel.js';
 import User from '../models/userModel.js';
 import Product from '../models/productModel.js';
-import { isAuth, isAdmin } from '../utils.js';
+import { isAuth, isAdmin, mailgun, payOrderEmailTemplate } from '../utils.js';
 
 const orderRouter = express.Router();
 
@@ -13,7 +13,6 @@ orderRouter.get(
   isAdmin,
   expressAsyncHandler(async (req, res) => {
     const orders = await Order.find().populate('user', 'name');
-    console.log(orders, 'dfkfjhdhkfd');
     res.send(orders);
   })
 );
@@ -124,7 +123,10 @@ orderRouter.put(
   '/:id/pay',
   isAuth,
   expressAsyncHandler(async (req, res) => {
-    const order = await Order.findById(req.params.id);
+    const order = await Order.findById(req.params.id).populate(
+      'user',
+      'email name'
+    );
     if (order) {
       order.isPaid = true;
       order.paidAt = Date.now();
@@ -134,8 +136,28 @@ orderRouter.put(
         update_time: req.body.update_time,
         email_address: req.body.email_address,
       };
-
       const updatedOrder = await order.save();
+      mailgun()
+        .messages()
+        .send(
+          {
+            from: 'Caroline <carolinemg@sandbox59d19782dd3640acace1d6efef1a3e2d.mailgun.org>',
+            to: `${order.user.name} <${order.user.email}>`,
+            subject: `New order ${order._id}`,
+            text: payOrderEmailTemplate(order),
+          },
+          (error, body) => {
+            if (error) {
+              console.log(error);
+            }
+            console.log(
+              body,
+              'send was successful!',
+              'Keep trying, with equinimity, clarity, kindness and compassion.'
+            );
+          }
+        );
+
       res.send({ message: 'Order Paid', order: updatedOrder });
     } else {
       res.status(404).send({ message: 'Order Not Found' });
