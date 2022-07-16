@@ -84,14 +84,39 @@ export default function ProductCreateScreen() {
         dispatch({ type: 'CREATE_SUCCESS' });
         navigate(`/product/${data.product.slug}`);
       } catch (err) {
-        toast.error(getError(error));
+        toast.error(getError(err));
         dispatch({
           type: 'CREATE_FAIL',
         });
       }
     }
   };
-  const uploadFileHandler = () => {};
+  const uploadFileHandler = async (e, forImages) => {
+    const file = e.target.files[0];
+    const bodyFormData = new FormData();
+    bodyFormData.append('file', file);
+    try {
+      dispatch({ type: 'UPLOAD_REQUEST' });
+      const { data } = await axios.post('/api/upload', bodyFormData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+          authorization: `Bearer ${userInfo.token}`,
+        },
+      });
+      dispatch({ type: 'UPLOAD_SUCCESS' });
+
+      if (forImages) {
+        setImages([...images, data.secure_url]);
+      } else {
+        setImage(data.secure_url);
+      }
+      toast.success('Image uploaded successfully. click Update to apply it');
+    } catch (err) {
+      toast.error(getError(err));
+      dispatch({ type: 'UPLOAD_FAIL', payload: getError(err) });
+    }
+  };
+
   const deleteFileHandler = () => {};
 
   return (
