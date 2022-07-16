@@ -63,6 +63,12 @@ main {
   color: #f08000;
 }
 
+/* navbar */
+.navbar {
+  background-color: #639463;
+  color: #639463;
+}
+
 /* sidebar */
 .navbar-brand {
   font-weight: bold;
