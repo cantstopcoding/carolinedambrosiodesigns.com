@@ -35,6 +35,7 @@ import OrderListScreen from './screens/OrderListScreen';
 import UserListScreen from './screens/UserListScreen';
 import UserEditScreen from './screens/UserEditScreen';
 import ProductCreateScreen from './screens/ProductCreateScreen';
+import Banner from './assets/Banner.jpg';
 
 function App() {
   const { state, dispatch: ctxDispatch } = useContext(Store);
@@ -74,7 +75,7 @@ function App() {
       >
         <ToastContainer position='bottom-center' limit={1} />
         <header>
-          <Navbar bg='dark' variant='dark' expand='lg'>
+          <Navbar className='navbar' expand='lg'>
             <Container>
               <Button
                 variant='dark'
@@ -166,6 +167,7 @@ function App() {
             ))}
           </Nav>
         </div>
+        <img src={`${Banner}`} className='img-fluid' alt='banner' />
         <main className='mt-3'>
           <Container>
             <Routes>
