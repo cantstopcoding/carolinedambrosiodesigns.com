@@ -2,7 +2,7 @@ import axios from 'axios';
 import React, { useContext, useReducer, useState } from 'react';
 import { Button, Container, Form, ListGroup } from 'react-bootstrap';
 import { Helmet } from 'react-helmet-async';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import LoadingBox from '../components/LoadingBox';
 import MessageBox from '../components/MessageBox';
@@ -37,8 +37,6 @@ const reducer = (state, action) => {
 
 export default function ProductCreateScreen() {
   const navigate = useNavigate();
-  const params = useParams(); // /product/:id
-  const { id: productId } = params;
 
   const { state } = useContext(Store);
   const { userInfo } = state;
