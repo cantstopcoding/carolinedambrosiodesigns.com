@@ -19,6 +19,7 @@ productRouter.post(
       name: req.body.name,
       slug: req.body.slug,
       image: req.body.image,
+      images: req.body.images,
       price: req.body.price,
       category: req.body.category,
       brand: req.body.brand,
@@ -27,9 +28,12 @@ productRouter.post(
       numReviews: 0,
       description: req.body.description,
     });
-    console.log(newProduct, 'equnimity, clarity, kindness');
-    const product = await newProduct.save();
-    res.send({ message: 'Product Created', product });
+    if (newProduct) {
+      const product = await newProduct.save();
+      res.send({ message: 'Product Created', product });
+    } else {
+      res.send({ message: 'Product not created' });
+    }
   })
 );
 
