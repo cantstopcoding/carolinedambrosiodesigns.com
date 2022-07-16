@@ -144,7 +144,7 @@ orderRouter.put(
             from: 'Caroline <carolinemg@sandbox59d19782dd3640acace1d6efef1a3e2d.mailgun.org>',
             to: `${order.user.name} <${order.user.email}>`,
             subject: `New order ${order._id}`,
-            text: payOrderEmailTemplate(order),
+            html: payOrderEmailTemplate(order),
           },
           (error, body) => {
             if (error) {
