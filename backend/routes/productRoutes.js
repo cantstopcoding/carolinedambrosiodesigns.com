@@ -20,6 +20,7 @@ productRouter.post(
       slug: req.body.slug,
       image: req.body.image,
       images: req.body.images,
+      pdfFile: req.body.pdfFile,
       price: req.body.price,
       category: req.body.category,
       brand: req.body.brand,
