@@ -9,6 +9,7 @@ import MessageBox from '../components/MessageBox';
 import ProductForm from '../components/ProductForm';
 import { Store } from '../Store';
 import { getError } from '../utils';
+import { saveAs } from 'file-saver';
 
 const reducer = (state, action) => {
   switch (action.type) {
@@ -52,6 +53,7 @@ export default function ProductCreateScreen() {
   const [price, setPrice] = useState('');
   const [image, setImage] = useState('');
   const [images, setImages] = useState([]);
+  const [pdfFile, setPdfFile] = useState('');
   const [category, setCategory] = useState('');
   const [countInStock, setCountInStock] = useState('');
   const [brand, setBrand] = useState('');
@@ -70,6 +72,7 @@ export default function ProductCreateScreen() {
             price,
             image,
             images,
+            pdfFile,
             category,
             brand,
             countInStock,
@@ -90,7 +93,7 @@ export default function ProductCreateScreen() {
       }
     }
   };
-  const uploadFileHandler = async (e, forImages) => {
+  const uploadFileHandler = async (e, forImages, forPdf) => {
     const file = e.target.files[0];
     const bodyFormData = new FormData();
     bodyFormData.append('file', file);
@@ -103,9 +106,10 @@ export default function ProductCreateScreen() {
         },
       });
       dispatch({ type: 'UPLOAD_SUCCESS' });
-
       if (forImages) {
         setImages([...images, data.secure_url]);
+      } else if (forPdf) {
+        setPdfFile(data.secure_url);
       } else {
         setImage(data.secure_url);
       }
@@ -121,6 +125,13 @@ export default function ProductCreateScreen() {
     toast.success('Image removed successfully.');
   };
 
+  const saveFile = () => {
+    saveAs(
+      'https://res.cloudinary.com/caroline-dambrosio-designs/image/upload/v1658237017/ra2y5vsfskcj6ki1psrx.pdf',
+      'example.pdf'
+    );
+  };
+
   return (
     <>
       <Container className='small-container'>
@@ -128,6 +139,17 @@ export default function ProductCreateScreen() {
           <title>Create Product</title>
         </Helmet>
         <h1>Create Product</h1>
+        <div>
+          <a
+            href='https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf'
+            download
+          >
+            Click to download
+          </a>
+          <div>
+            <button onClick={saveFile}>download</button>
+          </div>
+        </div>
         {loadingCreate ? (
           <LoadingBox></LoadingBox>
         ) : error ? (
