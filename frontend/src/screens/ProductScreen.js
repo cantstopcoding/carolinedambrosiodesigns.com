@@ -16,6 +16,7 @@ import { getError } from '../utils';
 import { Store } from '../Store';
 import FloatingLabel from 'react-bootstrap/FloatingLabel';
 import { toast } from 'react-toastify';
+import { saveAs } from 'file-saver';
 
 const reducer = (state, action) => {
   switch (action.type) {
@@ -44,6 +45,7 @@ function ProductScreen() {
   const [rating, setRating] = useState(0);
   const [comment, setComment] = useState('');
   const [selectedImage, setSelectedImage] = useState('');
+  const [pdfFile, setPdfFile] = useState('');
 
   const navigate = useNavigate();
   const params = useParams();
@@ -60,6 +62,7 @@ function ProductScreen() {
       dispatch({ type: 'FETCH_REQUEST' });
       try {
         const result = await axios.get(`/api/products/slug/${slug}`);
+        setPdfFile(result.data.pdfFile);
         dispatch({ type: 'FETCH_SUCCESS', payload: result.data });
       } catch (err) {
         dispatch({ type: 'FETCH_FAIL', payload: getError(err) });
@@ -117,6 +120,12 @@ function ProductScreen() {
       dispatch({ type: 'CREATE_FAIL' });
     }
   };
+
+  const saveFile = () => {
+    const slugifyProductName = product.name.replace(/\s+/g, '-').toLowerCase();
+    saveAs(pdfFile, `${slugifyProductName}.pdf`);
+  };
+
   return loading ? (
     <LoadingBox />
   ) : error ? (
@@ -138,6 +147,9 @@ function ProductScreen() {
                 <title>{product.name}</title>
               </Helmet>
               <h1>{product.name}</h1>
+              <Button variant='primary' onClick={saveFile}>
+                Download
+              </Button>
             </ListGroup.Item>
             <ListGroup.Item>
               <Rating
