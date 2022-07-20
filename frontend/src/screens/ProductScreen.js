@@ -176,7 +176,13 @@ function ProductScreen() {
                 <title>{product.name}</title>
               </Helmet>
               <h1>{product.name}</h1>
-              {userBoughtThisProduct && (
+
+              {userBoughtThisProduct && product.pdfFile && (
+                <Button variant='primary' onClick={saveFile}>
+                  Download
+                </Button>
+              )}
+              {userInfo && userInfo.isAdmin && product.pdfFile && (
                 <Button variant='primary' onClick={saveFile}>
                   Download
                 </Button>
