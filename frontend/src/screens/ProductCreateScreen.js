@@ -143,6 +143,7 @@ export default function ProductCreateScreen() {
             price={price}
             image={image}
             images={images}
+            pdfFile={pdfFile}
             category={category}
             brand={brand}
             countInStock={countInStock}
@@ -152,6 +153,7 @@ export default function ProductCreateScreen() {
             setPrice={setPrice}
             setImage={setImage}
             setImages={setImages}
+            setPdfFile={setPdfFile}
             setCategory={setCategory}
             setBrand={setBrand}
             setCountInStock={setCountInStock}
