@@ -46,10 +46,14 @@ function ProductScreen() {
   const [comment, setComment] = useState('');
   const [selectedImage, setSelectedImage] = useState('');
   const [pdfFile, setPdfFile] = useState('');
+  const [userOrderData, setUserOrderData] = useState([]);
 
   const navigate = useNavigate();
   const params = useParams();
   const { slug } = params;
+
+  const { state, dispatch: ctxDispatch } = useContext(Store);
+  const { cart, userInfo } = state;
 
   const [{ loading, error, product, loadingCreateReview }, dispatch] =
     useReducer(reducer, {
@@ -57,6 +61,12 @@ function ProductScreen() {
       loading: true,
       error: '',
     });
+
+  const userOrders = userOrderData.map((o) => o.orderItems).flat();
+  const userBoughtThisProduct = userOrders
+    .map((order) => order.name)
+    .includes(product.name);
+
   useEffect(() => {
     const fetchData = async () => {
       dispatch({ type: 'FETCH_REQUEST' });
@@ -68,11 +78,30 @@ function ProductScreen() {
         dispatch({ type: 'FETCH_FAIL', payload: getError(err) });
       }
     };
-    fetchData();
-  }, [slug]);
+    const fetchUserOrderData = async () => {
+      // dispatch({ type: 'FETCH_REQUEST' });
+      try {
+        const { data } = await axios.get(
+          `/api/orders/mine`,
 
-  const { state, dispatch: ctxDispatch } = useContext(Store);
-  const { cart, userInfo } = state;
+          { headers: { Authorization: `Bearer ${userInfo.token}` } }
+        );
+        setUserOrderData(data);
+        // if this order is paid, then show the button to download the pdf
+        // if the current product name is equal to any of the order product names, then show the button to download the pdf
+        // dispatch({ type: 'FETCH_SUCCESS', payload: data });
+      } catch (error) {
+        dispatch({
+          // type: 'FETCH_FAIL',
+          payload: getError(error),
+        });
+      }
+    };
+
+    fetchUserOrderData();
+    fetchData();
+  }, [slug, userInfo]);
+
   const addToCartHandler = async () => {
     const existItem = cart.cartItems.find((x) => x._id === product._id);
     const quantity = existItem ? existItem.quantity + 1 : 1;
@@ -147,9 +176,11 @@ function ProductScreen() {
                 <title>{product.name}</title>
               </Helmet>
               <h1>{product.name}</h1>
-              <Button variant='primary' onClick={saveFile}>
-                Download
-              </Button>
+              {userBoughtThisProduct && (
+                <Button variant='primary' onClick={saveFile}>
+                  Download
+                </Button>
+              )}
             </ListGroup.Item>
             <ListGroup.Item>
               <Rating
