@@ -79,7 +79,6 @@ function ProductScreen() {
       }
     };
     const fetchUserOrderData = async () => {
-      // dispatch({ type: 'FETCH_REQUEST' });
       try {
         const { data } = await axios.get(
           `/api/orders/mine`,
@@ -87,12 +86,8 @@ function ProductScreen() {
           { headers: { Authorization: `Bearer ${userInfo.token}` } }
         );
         setUserOrderData(data);
-        // if this order is paid, then show the button to download the pdf
-        // if the current product name is equal to any of the order product names, then show the button to download the pdf
-        // dispatch({ type: 'FETCH_SUCCESS', payload: data });
       } catch (error) {
         dispatch({
-          // type: 'FETCH_FAIL',
           payload: getError(error),
         });
       }
