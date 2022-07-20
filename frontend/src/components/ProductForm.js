@@ -65,7 +65,23 @@ export default function ProductForm(props) {
         <Form.Label>Upload Aditional Image</Form.Label>
         <Form.Control
           type='file'
-          onChange={(e) => props.uploadFileHandler(e, true)}
+          onChange={(e) => props.uploadFileHandler(e, true, false)}
+        />
+        {props.loadingUpload && <LoadingBox></LoadingBox>}
+      </Form.Group>
+
+      <Form.Group className='mb-3' controlId='pdf'>
+        <Form.Label>PDF File</Form.Label>
+        <Form.Control
+          value={props.pdfFile}
+          onChange={(e) => props.setPdfFile(e.target.value)}
+        />
+      </Form.Group>
+      <Form.Group className='mb-3' controlId='pdfFile'>
+        <Form.Label>Upload PDF</Form.Label>
+        <Form.Control
+          type='file'
+          onChange={(e) => props.uploadFileHandler(e, false, true)}
         />
         {props.loadingUpload && <LoadingBox></LoadingBox>}
       </Form.Group>

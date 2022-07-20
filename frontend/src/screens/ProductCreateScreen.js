@@ -52,6 +52,7 @@ export default function ProductCreateScreen() {
   const [price, setPrice] = useState('');
   const [image, setImage] = useState('');
   const [images, setImages] = useState([]);
+  const [pdfFile, setPdfFile] = useState('');
   const [category, setCategory] = useState('');
   const [countInStock, setCountInStock] = useState('');
   const [brand, setBrand] = useState('');
@@ -70,6 +71,7 @@ export default function ProductCreateScreen() {
             price,
             image,
             images,
+            pdfFile,
             category,
             brand,
             countInStock,
@@ -90,7 +92,7 @@ export default function ProductCreateScreen() {
       }
     }
   };
-  const uploadFileHandler = async (e, forImages) => {
+  const uploadFileHandler = async (e, forImages, forPdf) => {
     const file = e.target.files[0];
     const bodyFormData = new FormData();
     bodyFormData.append('file', file);
@@ -103,9 +105,10 @@ export default function ProductCreateScreen() {
         },
       });
       dispatch({ type: 'UPLOAD_SUCCESS' });
-
       if (forImages) {
         setImages([...images, data.secure_url]);
+      } else if (forPdf) {
+        setPdfFile(data.secure_url);
       } else {
         setImage(data.secure_url);
       }
@@ -140,6 +143,7 @@ export default function ProductCreateScreen() {
             price={price}
             image={image}
             images={images}
+            pdfFile={pdfFile}
             category={category}
             brand={brand}
             countInStock={countInStock}
@@ -149,6 +153,7 @@ export default function ProductCreateScreen() {
             setPrice={setPrice}
             setImage={setImage}
             setImages={setImages}
+            setPdfFile={setPdfFile}
             setCategory={setCategory}
             setBrand={setBrand}
             setCountInStock={setCountInStock}
