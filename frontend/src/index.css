@@ -12,13 +12,17 @@ main {
 }
 .btn-primary,
 .btn-outline-primary {
-  background-color: #f0c040;
-  color: #000000;
+  background-color: #73b1c8;
+  color: #0d0e26;
 }
 .products {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
+}
+
+.product-card-title {
+  color: #5e1717;
 }
 
 .rating span {
@@ -57,15 +61,22 @@ main {
 }
 
 .checkout-steps > div.active {
-  border-bottom: 0.2rem solid #f08000;
-  color: #f08000;
+  border-bottom: 0.2rem solid #5e1717;
+  color: #5e1717;
 }
 
 /* navbar */
 .navbar {
-  background-color: #639463;
-  color: #639463;
+  background-color: #73b1c8;
+  color: #73b1c8;
 }
+
+#hamburger-btn {
+  background-color: #0d0e26;
+  color: #ffffff;
+}
+
+/* navbar */
 
 /* sidebar */
 .navbar-brand {
@@ -88,6 +99,7 @@ main {
 }
 .active-nav {
   left: 0;
+  background-color: #ffffff;
 }
 .text-bold {
   font-weight: bold;
@@ -95,4 +107,9 @@ main {
 
 button.thumbnail {
   padding: 0;
+}
+
+#button-search {
+  background-color: #5e1717;
+  color: #ffffff;
 }
