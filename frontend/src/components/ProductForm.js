@@ -113,6 +113,7 @@ export default function ProductForm(props) {
       <Form.Group className='mb-3' controlId='description'>
         <Form.Label>Description</Form.Label>
         <Form.Control
+          as='textarea'
           value={props.description}
           onChange={(e) => props.setDescription(e.target.value)}
           required
