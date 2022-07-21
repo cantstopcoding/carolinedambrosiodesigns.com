@@ -78,7 +78,7 @@ function App() {
           <Navbar className='navbar' expand='lg'>
             <Container>
               <Button
-                variant='dark'
+                id='hamburger-btn'
                 onClick={() => setSidebarIsOpen(!sidebarIsOpen)}
               >
                 <i className='fas fa-bars'></i>
@@ -91,7 +91,7 @@ function App() {
                 <SearchBox />
                 <Nav className='me-auto w-100 justify-content-end'>
                   <Link to='/cart' className='nav-link'>
-                    Cart
+                    <strong>Cart</strong>
                     {cart.cartItems.length > 0 && (
                       <Badge pill bg='danger'>
                         {cart.cartItems.reduce((a, c) => a + c.quantity, 0)}
@@ -99,7 +99,10 @@ function App() {
                     )}
                   </Link>
                   {userInfo ? (
-                    <NavDropdown title={userInfo.name} id='basic-nav-dropdown'>
+                    <NavDropdown
+                      title={<strong>{userInfo.name}</strong>}
+                      id='basic-nav-dropdown'
+                    >
                       <LinkContainer to='/profile'>
                         <NavDropdown.Item>User Profile</NavDropdown.Item>
                       </LinkContainer>
@@ -121,7 +124,10 @@ function App() {
                     </Link>
                   )}
                   {userInfo && userInfo.isAdmin && (
-                    <NavDropdown title='Admin' id='admin-nav-dropdown'>
+                    <NavDropdown
+                      title={<strong>Admin</strong>}
+                      id='admin-nav-dropdown'
+                    >
                       <LinkContainer to='/admin/dashboard'>
                         <NavDropdown.Item>Dashboard</NavDropdown.Item>
                       </LinkContainer>
@@ -151,7 +157,7 @@ function App() {
               : 'side-navbar d-flex justify-content-between flex-wrap flex-column'
           }
         >
-          <Nav className='flex-column text-white w-100 p-2'>
+          <Nav className='flex-column w-100 p-2'>
             <Nav.Item>
               <strong>Categories</strong>
             </Nav.Item>
