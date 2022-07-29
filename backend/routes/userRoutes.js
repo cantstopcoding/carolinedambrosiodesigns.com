@@ -16,25 +16,24 @@ const userRouter = express.Router();
 //   })
 // );
 
-userRouter.get(
-  '/:id',
-  isAuth,
-  isAdmin,
-  expressAsyncHandler(async (req, res) => {
-    const user = await User.findById(req.params.id);
-    if (user) {
-      res.send(user);
-    } else {
-      res.status(404).send({ message: 'User Not Found' });
-    }
-  })
-);
+// userRouter.get(
+//   '/:id',
+//   isAuth,
+//   isAdmin,
+//   expressAsyncHandler(async (req, res) => {
+//     const user = await User.findById(req.params.id);
+//     if (user) {
+//       res.send(user);
+//     } else {
+//       res.status(404).send({ message: 'User Not Found' });
+//     }
+//   })
+// );
 
 userRouter.put(
   '/profile',
   isAuth,
   expressAsyncHandler(async (req, res) => {
-    console.log('got it!');
     const user = await User.findById(req.user._id);
     if (user) {
       user.name = req.body.name || user.name;

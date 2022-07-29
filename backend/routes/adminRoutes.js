@@ -11,9 +11,22 @@ adminRouter.get(
   isAuth,
   isAdmin,
   expressAsyncHandler(async (req, res) => {
-    console.log('got it!');
     const users = await User.find({});
     res.send(users);
+  })
+);
+
+adminRouter.get(
+  '/users/:id/edit',
+  isAuth,
+  isAdmin,
+  expressAsyncHandler(async (req, res) => {
+    const user = await User.findById(req.params.id);
+    if (user) {
+      res.send(user);
+    } else {
+      res.status(404).send({ message: 'User Not Found' });
+    }
   })
 );
 

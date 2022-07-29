@@ -51,7 +51,7 @@ export default function UserEditScreen() {
     const fetchData = async () => {
       try {
         dispatch({ type: 'FETCH_REQUEST' });
-        const { data } = await axios.get(`/api/users/${userId}`, {
+        const { data } = await axios.get(`/api/admin/users/${userId}/edit`, {
           headers: { Authorization: `Bearer ${userInfo.token}` },
         });
         setName(data.name);
