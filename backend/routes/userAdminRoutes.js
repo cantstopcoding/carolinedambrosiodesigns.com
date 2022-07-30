@@ -3,9 +3,9 @@ import expressAsyncHandler from 'express-async-handler';
 import User from '../models/userModel.js';
 import { isAuth, isAdmin } from '../utils.js';
 
-const adminRouter = express.Router();
+const userAdminRouter = express.Router();
 
-adminRouter.get(
+userAdminRouter.get(
   '/users',
   isAuth,
   isAdmin,
@@ -15,7 +15,7 @@ adminRouter.get(
   })
 );
 
-adminRouter.get(
+userAdminRouter.get(
   '/users/:id/edit',
   isAuth,
   isAdmin,
@@ -29,7 +29,7 @@ adminRouter.get(
   })
 );
 
-adminRouter.put(
+userAdminRouter.put(
   '/users/:id',
   isAuth,
   isAdmin,
@@ -47,7 +47,7 @@ adminRouter.put(
   })
 );
 
-adminRouter.delete(
+userAdminRouter.delete(
   '/users/:id',
   isAuth,
   isAdmin,
@@ -66,4 +66,4 @@ adminRouter.delete(
   })
 );
 
-export default adminRouter;
+export default userAdminRouter;
