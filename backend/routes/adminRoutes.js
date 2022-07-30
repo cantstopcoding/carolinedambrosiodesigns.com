@@ -52,7 +52,6 @@ adminRouter.delete(
   isAuth,
   isAdmin,
   expressAsyncHandler(async (req, res) => {
-    console.log('got it!!!!');
     const user = await User.findById(req.params.id);
     if (user) {
       if (user.email === 'c@c.com') {
