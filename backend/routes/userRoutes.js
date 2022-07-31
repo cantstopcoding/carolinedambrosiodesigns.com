@@ -7,7 +7,7 @@ import { generateToken, isAuth } from '../utils.js';
 const userRouter = express.Router();
 
 userRouter.put(
-  '/profile',
+  '/profile/edit',
   isAuth,
   expressAsyncHandler(async (req, res) => {
     const user = await User.findById(req.user._id);
