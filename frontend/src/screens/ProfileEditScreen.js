@@ -21,7 +21,7 @@ const reducer = (state, action) => {
   }
 };
 
-export default function ProfileScreen() {
+export default function ProfileEditScreen() {
   const { state, dispatch: ctxDispatch } = useContext(Store);
   const { userInfo } = state;
   const [name, setName] = useState(userInfo.name);

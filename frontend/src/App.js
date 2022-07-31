@@ -20,7 +20,7 @@ import PaymentMethodScreen from './screens/PaymentMethodScreen';
 import PlaceOrderScreen from './screens/PlaceOrderScreen';
 import OrderScreen from './screens/OrderScreen';
 import OrderHistoryScreen from './screens/OrderHistoryScreen';
-import ProfileScreen from './screens/ProfileScreen';
+import ProfileEditScreen from './screens/ProfileEditScreen';
 import { Button } from 'react-bootstrap';
 import { getError } from './utils';
 import axios from 'axios';
@@ -186,7 +186,7 @@ function App() {
                 path='/profile/edit'
                 element={
                   <ProtectedRoute>
-                    <ProfileScreen />
+                    <ProfileEditScreen />
                   </ProtectedRoute>
                 }
               />
