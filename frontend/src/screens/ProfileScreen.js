@@ -64,9 +64,9 @@ export default function ProfileScreen() {
   return (
     <div className='container small-container'>
       <Helmet>
-        <title>User Profile</title>
+        <title>Update Profile</title>
       </Helmet>
-      <h1 className='my-3'>User Profile</h1>
+      <h1 className='my-3'>Update Profile</h1>
       <form onSubmit={submitHandler}>
         <Form.Group className='mb-3' controlId='name'>
           <Form.Label>Name</Form.Label>
