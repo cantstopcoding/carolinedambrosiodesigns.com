@@ -65,13 +65,18 @@ userRouter.post(
       });
 
       const user = await newUser.save();
-      res.send({
+
+      const userInfo = {
         _id: user._id,
         name: user.name,
         email: user.email,
         isAdmin: user.isAdmin,
         token: generateToken(user),
-      });
+      };
+
+      res.send(userInfo);
+    } else {
+      res.status(400).send({ message: 'Password is required' });
     }
   })
 );
