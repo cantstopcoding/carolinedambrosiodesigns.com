@@ -7,7 +7,7 @@ import { generateToken, isAuth } from '../utils.js';
 const userRouter = express.Router();
 
 userRouter.put(
-  '/profile',
+  '/profile/edit',
   isAuth,
   expressAsyncHandler(async (req, res) => {
     const user = await User.findById(req.user._id);
@@ -55,19 +55,51 @@ userRouter.post(
 userRouter.post(
   '/signup',
   expressAsyncHandler(async (req, res) => {
-    const newUser = new User({
-      name: req.body.name,
-      email: req.body.email,
-      password: bcrypt.hashSync(req.body.password),
-    });
-    const user = await newUser.save();
-    res.send({
-      _id: user._id,
-      name: user.name,
-      email: user.email,
-      isAdmin: user.isAdmin,
-      token: generateToken(user),
-    });
+    const userPersistsPassword = !!req.body.password;
+
+    if (userPersistsPassword) {
+      const newUser = new User({
+        name: req.body.name,
+        email: req.body.email,
+        password: bcrypt.hashSync(req.body.password),
+      });
+
+      const user = await newUser.save();
+
+      const userInfo = {
+        _id: user._id,
+        name: user.name,
+        email: user.email,
+        isAdmin: user.isAdmin,
+        token: generateToken(user),
+      };
+
+      res.send(userInfo);
+    } else {
+      res.status(400).send({ message: 'Password is required' });
+    }
+  })
+);
+
+userRouter.post(
+  '/confirm-password-to-see-user-info',
+  isAuth,
+  expressAsyncHandler(async (req, res) => {
+    const user = await User.findById(req.user._id);
+    if (user) {
+      const passwordIsCorrect = bcrypt.compareSync(
+        req.body.password,
+        user.password
+      );
+
+      if (passwordIsCorrect) {
+        res.send({ message: 'Password is correct' });
+      } else {
+        res.status(401).send({ message: 'Password is incorrect' });
+      }
+    } else {
+      res.status(404).send({ message: 'User not found' });
+    }
   })
 );
 
