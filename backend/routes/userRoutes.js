@@ -81,4 +81,26 @@ userRouter.post(
   })
 );
 
+userRouter.post(
+  '/confirm-password-to-see-user-info',
+  isAuth,
+  expressAsyncHandler(async (req, res) => {
+    const user = await User.findById(req.user._id);
+    if (user) {
+      const passwordIsCorrect = bcrypt.compareSync(
+        req.body.password,
+        user.password
+      );
+
+      if (passwordIsCorrect) {
+        res.send({ message: 'Password is correct' });
+      } else {
+        res.status(401).send({ message: 'Password is incorrect' });
+      }
+    } else {
+      res.status(404).send({ message: 'User not found' });
+    }
+  })
+);
+
 export default userRouter;

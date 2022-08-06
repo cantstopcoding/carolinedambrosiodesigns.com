@@ -6,7 +6,6 @@ import { Store } from '../Store';
 import { toast } from 'react-toastify';
 import { getError } from '../utils';
 import axios from 'axios';
-import { Link, useLocation } from 'react-router-dom';
 
 const reducer = (state, action) => {
   switch (action.type) {
@@ -29,12 +28,8 @@ export default function ProfileEditScreen() {
   const [email, setEmail] = useState(userInfo.email);
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
-  const { search } = useLocation();
-  const redirectInUrl = new URLSearchParams(search).get('redirect');
-  const redirect = redirectInUrl ? redirectInUrl : '/';
-  const userConfirmsPassword = false;
-
-  console.log(userInfo, 'userInfo here');
+  const [confirmPasswordToSeeUserInfo, setConfirmPasswordToSeeUserInfo] =
+    useState(false);
 
   const [{ loadingUpdate }, dispatch] = useReducer(reducer, {
     loadingUpdate: false,
@@ -68,11 +63,25 @@ export default function ProfileEditScreen() {
     }
   };
 
-  const confirmPasswordHandler = async (e) => {
+  const confirmPasswordToSeeUserInfoHandler = async (e) => {
     e.preventDefault();
-    // send a post request to the server to see if the password is correct
-    // if it is, then we have to turn userConfirmsPassword to true
-    // if it is not, then userConfirmsPassword stays false
+    try {
+      const { data } = await axios.post(
+        '/api/users/confirm-password-to-see-user-info',
+        {
+          password,
+        },
+        {
+          headers: { Authorization: `Bearer ${userInfo.token}` },
+        }
+      );
+
+      if (data.message === 'Password is correct') {
+        setConfirmPasswordToSeeUserInfo(true);
+      }
+    } catch (err) {
+      toast.error(getError(err));
+    }
   };
 
   return (
@@ -80,7 +89,7 @@ export default function ProfileEditScreen() {
       <Helmet>
         <title>Update Profile</title>
       </Helmet>
-      {userConfirmsPassword ? (
+      {confirmPasswordToSeeUserInfo ? (
         <>
           <h1 className='my-3'>Update Profile</h1>
 
@@ -127,7 +136,7 @@ export default function ProfileEditScreen() {
           <h6>Please enter your password in order to get this.</h6>
           <br />
           <>
-            <Form onSubmit={confirmPasswordHandler}>
+            <Form onSubmit={confirmPasswordToSeeUserInfoHandler}>
               <Form.Group className='mb-3' controlId='password'>
                 <Form.Label>Password</Form.Label>
                 <Form.Control
