@@ -36,6 +36,7 @@ import UserListScreen from './screens/UserListScreen';
 import UserEditScreen from './screens/UserEditScreen';
 import ProductCreateScreen from './screens/ProductCreateScreen';
 import Banner from './assets/Banner.jpg';
+import PasswordScreen from './screens/PasswordScreen';
 
 function App() {
   const { state, dispatch: ctxDispatch } = useContext(Store);
@@ -187,6 +188,14 @@ function App() {
                 element={
                   <ProtectedRoute>
                     <ProfileEditScreen />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path='/settings/password'
+                element={
+                  <ProtectedRoute>
+                    <PasswordScreen />
                   </ProtectedRoute>
                 }
               />
