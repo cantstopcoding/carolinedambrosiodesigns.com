@@ -14,6 +14,9 @@ userRouter.put(
     if (user) {
       user.name = req.body.name || user.name;
       user.email = req.body.email || user.email;
+      if (req.body.password) {
+        user.password = bcrypt.hashSync(req.body.password, 8);
+      }
       const updatedUser = await user.save();
       res.send({
         _id: updatedUser._id,
@@ -24,6 +27,38 @@ userRouter.put(
       });
     } else {
       res.status(404).send({ message: 'User not found' });
+    }
+  })
+);
+
+userRouter.put(
+  '/profile/edit-password',
+  isAuth,
+  expressAsyncHandler(async (req, res) => {
+    const user = await User.findById(req.user._id);
+
+    if (user) {
+      if (passwordIsCorrect()) {
+        await updatePasswordAndSendNewToken();
+      } else {
+        invalidPassword();
+      }
+    }
+
+    function passwordIsCorrect() {
+      return bcrypt.compareSync(req.body.password, user.password);
+    }
+
+    async function updatePasswordAndSendNewToken() {
+      user.password = bcrypt.hashSync(req.body.newPassword, 8);
+      const updatedUser = await user.save();
+      res.send({
+        token: generateToken(updatedUser),
+      });
+    }
+
+    function invalidPassword() {
+      res.status(401).send({ message: 'Invalid Password' });
     }
   })
 );
