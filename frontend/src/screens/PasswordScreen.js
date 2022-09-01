@@ -16,6 +16,11 @@ export default function PasswordScreen() {
   const submitHandler = async (e) => {
     e.preventDefault();
 
+    if (currentAndNewPasswordsAreEqual()) {
+      toast.error('New password is the same as old password');
+      return;
+    }
+
     if (passwordIsNotConfirmed()) {
       toast.error('Passwords do not match');
       return;
@@ -27,7 +32,6 @@ export default function PasswordScreen() {
         {
           password,
           newPassword,
-          confirmPassword,
         },
         {
           headers: { Authorization: `Bearer ${userInfo.token}` },
@@ -42,6 +46,10 @@ export default function PasswordScreen() {
       //   type: 'FETCH_FAIL',
       // });
       toast.error(getError(err));
+    }
+
+    function currentAndNewPasswordsAreEqual() {
+      return password === newPassword;
     }
 
     function passwordIsNotConfirmed() {
