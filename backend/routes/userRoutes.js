@@ -17,14 +17,7 @@ userRouter.put(
       if (req.body.password) {
         user.password = bcrypt.hashSync(req.body.password, 8);
       }
-      const updatedUser = await user.save();
-      res.send({
-        _id: updatedUser._id,
-        name: updatedUser.name,
-        email: updatedUser.email,
-        isAdmin: updatedUser.isAdmin,
-        token: generateToken(updatedUser),
-      });
+      sendUpdatedUser(user, res);
     } else {
       res.status(404).send({ message: 'User not found' });
     }
@@ -38,26 +31,43 @@ userRouter.put(
     const user = await User.findById(req.user._id);
 
     if (user) {
+      await updatePasswordHandler();
+    }
+
+    async function updatePasswordHandler() {
+      checkIfDataIsPersisted();
       if (passwordIsCorrect()) {
-        await updatePasswordAndSendNewToken();
+        await updatePasswordAndSendUser();
       } else {
-        invalidPassword();
+        sendInvalidPasswordMessage();
       }
+    }
+
+    function checkIfDataIsPersisted() {
+      if (noPasswordData())
+        return res.status(400).send({ message: 'Password is required' });
+      if (noNewPasswordData())
+        return res.status(400).send({ message: 'New Password is required' });
+    }
+
+    function noPasswordData() {
+      return !req.body.password;
+    }
+
+    function noNewPasswordData() {
+      return !req.body.newPassword;
     }
 
     function passwordIsCorrect() {
       return bcrypt.compareSync(req.body.password, user.password);
     }
 
-    async function updatePasswordAndSendNewToken() {
+    async function updatePasswordAndSendUser() {
       user.password = bcrypt.hashSync(req.body.newPassword, 8);
-      const updatedUser = await user.save();
-      res.send({
-        token: generateToken(updatedUser),
-      });
+      await sendUpdatedUser(user, res);
     }
 
-    function invalidPassword() {
+    function sendInvalidPasswordMessage() {
       res.status(401).send({ message: 'Invalid Password' });
     }
   })
@@ -136,3 +146,14 @@ userRouter.post(
 );
 
 export default userRouter;
+
+async function sendUpdatedUser(user, response) {
+  const updatedUser = await user.save();
+  response.send({
+    _id: updatedUser._id,
+    name: updatedUser.name,
+    email: updatedUser.email,
+    isAdmin: updatedUser.isAdmin,
+    token: generateToken(updatedUser),
+  });
+}
