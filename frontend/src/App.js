@@ -37,6 +37,7 @@ import UserEditScreen from './screens/UserEditScreen';
 import ProductCreateScreen from './screens/ProductCreateScreen';
 import Banner from './assets/Banner.jpg';
 import PasswordScreen from './screens/PasswordScreen';
+import UpdateEmailScreen from './screens/UpdateEmailScreen';
 
 function App() {
   const { state, dispatch: ctxDispatch } = useContext(Store);
@@ -196,6 +197,14 @@ function App() {
                 element={
                   <ProtectedRoute>
                     <PasswordScreen />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path='/settings/email'
+                element={
+                  <ProtectedRoute>
+                    <UpdateEmailScreen />
                   </ProtectedRoute>
                 }
               />
