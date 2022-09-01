@@ -14,16 +14,61 @@ userRouter.put(
     if (user) {
       user.name = req.body.name || user.name;
       user.email = req.body.email || user.email;
-      const updatedUser = await user.save();
-      res.send({
-        _id: updatedUser._id,
-        name: updatedUser.name,
-        email: updatedUser.email,
-        isAdmin: updatedUser.isAdmin,
-        token: generateToken(updatedUser),
-      });
+      if (req.body.password) {
+        user.password = bcrypt.hashSync(req.body.password, 8);
+      }
+      sendUpdatedUser(user, res);
     } else {
       res.status(404).send({ message: 'User not found' });
+    }
+  })
+);
+
+userRouter.put(
+  '/profile/edit-password',
+  isAuth,
+  expressAsyncHandler(async (req, res) => {
+    const user = await User.findById(req.user._id);
+
+    if (user) {
+      await updatePasswordHandler();
+    }
+
+    async function updatePasswordHandler() {
+      handleEmptyInputs();
+      if (passwordIsCorrect()) {
+        await updatePasswordAndSendUser();
+      } else {
+        sendInvalidPasswordMessage();
+      }
+    }
+
+    function handleEmptyInputs() {
+      if (noPasswordData())
+        return res.status(400).send({ message: 'Password is required' });
+      if (noNewPasswordData())
+        return res.status(400).send({ message: 'New Password is required' });
+    }
+
+    function noPasswordData() {
+      return !req.body.password;
+    }
+
+    function noNewPasswordData() {
+      return !req.body.newPassword;
+    }
+
+    function passwordIsCorrect() {
+      return bcrypt.compareSync(req.body.password, user.password);
+    }
+
+    async function updatePasswordAndSendUser() {
+      user.password = bcrypt.hashSync(req.body.newPassword, 8);
+      await sendUpdatedUser(user, res);
+    }
+
+    function sendInvalidPasswordMessage() {
+      res.status(401).send({ message: 'Invalid Password' });
     }
   })
 );
@@ -101,3 +146,14 @@ userRouter.post(
 );
 
 export default userRouter;
+
+async function sendUpdatedUser(user, response) {
+  const updatedUser = await user.save();
+  response.send({
+    _id: updatedUser._id,
+    name: updatedUser.name,
+    email: updatedUser.email,
+    isAdmin: updatedUser.isAdmin,
+    token: generateToken(updatedUser),
+  });
+}
