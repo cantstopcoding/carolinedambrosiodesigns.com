@@ -35,7 +35,7 @@ userRouter.put(
     }
 
     async function updatePasswordHandler() {
-      checkIfDataIsPersisted();
+      handleEmptyInputs();
       if (passwordIsCorrect()) {
         await updatePasswordAndSendUser();
       } else {
@@ -43,7 +43,7 @@ userRouter.put(
       }
     }
 
-    function checkIfDataIsPersisted() {
+    function handleEmptyInputs() {
       if (noPasswordData())
         return res.status(400).send({ message: 'Password is required' });
       if (noNewPasswordData())
