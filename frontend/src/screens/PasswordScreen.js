@@ -1,5 +1,5 @@
 import axios from 'axios';
-import React, { useContext, useReducer, useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { Button, Form } from 'react-bootstrap';
 import { Helmet } from 'react-helmet-async';
 import { toast } from 'react-toastify';
@@ -12,8 +12,6 @@ export default function PasswordScreen() {
   const [password, setPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
-
-  const [dispatch] = useReducer();
 
   const submitHandler = async (e) => {
     e.preventDefault();
@@ -36,6 +34,7 @@ export default function PasswordScreen() {
       );
       ctxDispatch({ type: 'USER_SIGNIN', payload: data });
       localStorage.setItem('userInfo', JSON.stringify(data));
+      resetInputFields();
       toast.success('Password updated successfully');
     } catch (err) {
       // dispatch({
@@ -46,6 +45,12 @@ export default function PasswordScreen() {
 
     function passwordIsNotConfirmed() {
       return password !== confirmPassword;
+    }
+
+    function resetInputFields() {
+      setPassword('');
+      setNewPassword('');
+      setConfirmPassword('');
     }
   };
 
@@ -80,6 +85,7 @@ export default function PasswordScreen() {
       <Form.Group className='mb-3' controlId='password'>
         <Form.Label>Current Password</Form.Label>
         <Form.Control
+          value={password}
           type='password'
           onChange={(e) => setPassword(e.target.value)}
         />
@@ -92,6 +98,7 @@ export default function PasswordScreen() {
       <Form.Group className='mb-3' controlId='password'>
         <Form.Label>New Password</Form.Label>
         <Form.Control
+          value={newPassword}
           type='password'
           onChange={(e) => setNewPassword(e.target.value)}
         />
@@ -104,6 +111,7 @@ export default function PasswordScreen() {
       <Form.Group className='mb-3' controlId='password'>
         <Form.Label>Confirm Password</Form.Label>
         <Form.Control
+          value={confirmPassword}
           type='password'
           onChange={(e) => setConfirmPassword(e.target.value)}
         />
