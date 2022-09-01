@@ -18,7 +18,7 @@ export default function PasswordScreen() {
   const submitHandler = async (e) => {
     e.preventDefault();
 
-    if (password !== confirmPassword) {
+    if (passwordIsNotConfirmed()) {
       toast.error('Passwords do not match');
       return;
     }
@@ -42,6 +42,10 @@ export default function PasswordScreen() {
       //   type: 'FETCH_FAIL',
       // });
       toast.error(getError(err));
+    }
+
+    function passwordIsNotConfirmed() {
+      return password !== confirmPassword;
     }
   };
 
