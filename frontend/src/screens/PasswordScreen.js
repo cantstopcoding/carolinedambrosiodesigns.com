@@ -27,6 +27,7 @@ export default function PasswordScreen() {
         {
           password,
           newPassword,
+          confirmPassword,
         },
         {
           headers: { Authorization: `Bearer ${userInfo.token}` },
@@ -44,7 +45,7 @@ export default function PasswordScreen() {
     }
 
     function passwordIsNotConfirmed() {
-      return password !== confirmPassword;
+      return newPassword !== confirmPassword;
     }
 
     function resetInputFields() {
