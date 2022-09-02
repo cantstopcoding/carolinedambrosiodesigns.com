@@ -11,9 +11,10 @@ export default function UpdateEmailScreen() {
   const { userInfo } = state;
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [userConfirmsPassword, setUserConfirmsPassword] = useState(false);
+  const [confirmPasswordToProceed, setConfirmPasswordToProceed] =
+    useState(false);
 
-  const confirmPasswordToSeeUserInfoHandler = async (e) => {
+  const confirmPasswordToProceedHandler = async (e) => {
     e.preventDefault();
     try {
       const { data } = await axios.post(
@@ -27,7 +28,7 @@ export default function UpdateEmailScreen() {
       );
 
       if (data.message === 'Password is correct') {
-        setUserConfirmsPassword(true);
+        setConfirmPasswordToProceed(true);
       }
     } catch (err) {
       toast.error(getError(err));
@@ -64,7 +65,9 @@ export default function UpdateEmailScreen() {
   );
 
   function displayCertainFormHandler() {
-    return userConfirmsPassword ? newEmailAddressForm() : confirmPasswordForm();
+    return confirmPasswordToProceed
+      ? newEmailAddressForm()
+      : confirmPasswordForm();
   }
 
   function newEmailAddressForm() {
@@ -88,7 +91,7 @@ export default function UpdateEmailScreen() {
 
   function confirmPasswordForm() {
     return (
-      <form onSubmit={confirmPasswordToSeeUserInfoHandler}>
+      <form onSubmit={confirmPasswordToProceedHandler}>
         <Form.Group className='mb-3' controlId='password'>
           <Form.Label>Password</Form.Label>
           <Form.Control
