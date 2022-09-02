@@ -13,6 +13,7 @@ export default function UpdateEmailScreen() {
   const [password, setPassword] = useState('');
   const [confirmPasswordToProceed, setConfirmPasswordToProceed] =
     useState(false);
+  const [otp, setOtp] = useState('');
 
   const confirmPasswordToProceedHandler = async (e) => {
     e.preventDefault();
@@ -55,24 +56,38 @@ export default function UpdateEmailScreen() {
     }
   };
 
+  const verifyOtpHandler = async (e) => {};
+
   return (
     <div className='container small-container'>
       <Helmet>
         <title>Change your email</title>
       </Helmet>
       {displayCertainFormHandler()}
+      <form onSubmit={submitHandler}>
+        <Form.Group className='mb-3' controlId='otp'>
+          <Form.Label>Confirm OTP</Form.Label>
+          <Form.Control value={otp} onChange={(e) => setOtp(e.target.value)} />
+        </Form.Group>
+
+        <div className='mb-3'>
+          <Button type='submit'>Proceed</Button>
+        </div>
+      </form>
     </div>
   );
 
   function displayCertainFormHandler() {
-    return confirmPasswordToProceed
-      ? newEmailAddressForm()
-      : confirmPasswordForm();
+    if (confirmPasswordToProceed) {
+      return newEmailAddressForm();
+    } else {
+      return confirmPasswordForm();
+    }
   }
 
   function newEmailAddressForm() {
     return (
-      <form onSubmit={submitHandler}>
+      <form onSubmit={verifyOtpHandler}>
         <Form.Group className='mb-3' controlId='email'>
           <Form.Label>New Email</Form.Label>
           <Form.Control
@@ -83,7 +98,7 @@ export default function UpdateEmailScreen() {
         </Form.Group>
 
         <div className='mb-3'>
-          <Button type='submit'>Submit</Button>
+          <Button type='submit'>Proceed</Button>
         </div>
       </form>
     );
@@ -102,7 +117,7 @@ export default function UpdateEmailScreen() {
         </Form.Group>
 
         <div className='mb-3'>
-          <Button type='submit'>Submit</Button>
+          <Button type='submit'>Proceed</Button>
         </div>
       </form>
     );
