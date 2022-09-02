@@ -191,7 +191,7 @@ userRouter.post(
       const user = await User.findOne({ email: req.body.currentEmail });
       user.email = req.body.newEmail;
       await user.save();
-      return res.status(200).send({ message: 'Email updated successfully' });
+      sendUpdatedUser(user, res);
     }
 
     function otpIsExpired() {
