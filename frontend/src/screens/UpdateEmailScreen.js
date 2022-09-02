@@ -9,7 +9,7 @@ import { getError } from '../utils';
 export default function UpdateEmailScreen() {
   const { state, dispatch: ctxDispatch } = useContext(Store);
   const { userInfo } = state;
-  const [email, setEmail] = useState('');
+  const [newEmail, setNewEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPasswordToProceed, setConfirmPasswordToProceed] =
     useState(false);
@@ -44,7 +44,7 @@ export default function UpdateEmailScreen() {
       const { data } = await axios.post(
         '/api/users/email-otp',
         {
-          email,
+          newEmail,
           otp,
         },
         {
@@ -65,7 +65,7 @@ export default function UpdateEmailScreen() {
       const { data } = await axios.post(
         '/api/users//update-email/verify-otp',
         {
-          email,
+          newEmail,
           otp,
         },
         {
@@ -95,12 +95,12 @@ export default function UpdateEmailScreen() {
   function newEmailAddressForm() {
     return (
       <form onSubmit={sendOtpToNewEmail}>
-        <Form.Group className='mb-3' controlId='email'>
+        <Form.Group className='mb-3' controlId='newEmail'>
           <Form.Label>New Email</Form.Label>
           <Form.Control
-            value={email}
+            value={newEmail}
             type='email'
-            onChange={(e) => setEmail(e.target.value)}
+            onChange={(e) => setNewEmail(e.target.value)}
           />
         </Form.Group>
 
