@@ -10,6 +10,7 @@ export default function UpdateEmailScreen() {
   const { state, dispatch: ctxDispatch } = useContext(Store);
   const { userInfo } = state;
   const currentEmail = userInfo.email;
+  const name = userInfo.name;
   const [newEmail, setNewEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPasswordToProceed, setConfirmPasswordToProceed] =
@@ -47,6 +48,7 @@ export default function UpdateEmailScreen() {
         {
           newEmail,
           otp,
+          name,
         },
         {
           headers: { Authorization: `Bearer ${userInfo.token}` },
