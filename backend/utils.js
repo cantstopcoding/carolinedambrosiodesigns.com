@@ -109,3 +109,13 @@ export const payOrderEmailTemplate = (order) => {
   </p>
   `;
 };
+
+export const otpEmailTemplate = (otp) => {
+  return `<h1>Confirm your email address</h1>
+  <p>There's one quick step you need to complete in order to confirm your email address.</p>
+  <p>Enter the following code in DAmbrosio Designs to confirm your email address.</p>
+  <p>Code: <strong>${otp}</strong></p>
+  <p>Verification code expires in 5 minutes.</p>
+  <p>Thanks,</p>
+  <p>Caroline</p>`;
+};
