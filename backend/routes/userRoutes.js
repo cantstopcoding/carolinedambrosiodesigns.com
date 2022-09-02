@@ -152,26 +152,44 @@ userRouter.post(
   '/email-otp',
   isAuth,
   expressAsyncHandler(async (req, res) => {
-    const OTP = otpGenerator.generate(6);
+    const otpCharacters = otpGenerator.generate(6);
+    console.log('otpCharacters:', otpCharacters);
 
-    const email = req.body.email;
+    const newEmail = req.body.newEmail;
 
-    const otp = new Otp({ email: email, otp: OTP });
+    const otpModel = new Otp({ newEmail: newEmail, otp: otpCharacters });
 
     const salt = await bcrypt.genSalt(10);
 
-    otp.otp = await bcrypt.hash(otp.otp, salt);
+    otpModel.otp = await bcrypt.hash(otpModel.otp, salt);
 
-    const result = await otp.save();
+    const result = await otpModel.save();
 
     return res.status(200).send({ message: 'OTP sent successfully' });
   })
 );
 
 userRouter.post(
-  '/update-email/verify',
+  '/update-email/verify-otp',
   isAuth,
-  expressAsyncHandler(async (req, res) => {})
+  expressAsyncHandler(async (req, res) => {
+    const otpArray = await Otp.find({ newEmail: req.body.newEmail });
+    if (otpArray.length === 0) {
+      return res.status(400).send({ message: 'You used an expired OTP' });
+    }
+    const lastOtpGenerated = otpArray[otpArray.length - 1];
+
+    const validUser = bcrypt.compareSync(req.body.otp, lastOtpGenerated.otp);
+
+    if (lastOtpGenerated.newEmail === req.body.newEmail && validUser) {
+      // const user = await User.findOne(req.user._id);
+      // user.email = req.body.newEmail;
+      // await user.save();
+      // return res.status(200).send({ message: 'Email updated successfully' });
+    } else {
+      return res.status(400).send({ message: 'Your OTP was wrong' });
+    }
+  })
 );
 
 export default userRouter;
