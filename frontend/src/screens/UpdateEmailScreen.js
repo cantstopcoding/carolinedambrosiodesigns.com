@@ -45,6 +45,7 @@ export default function UpdateEmailScreen() {
         '/api/users/email-otp',
         {
           email,
+          otp,
         },
         {
           headers: { Authorization: `Bearer ${userInfo.token}` },
@@ -58,7 +59,23 @@ export default function UpdateEmailScreen() {
     }
   };
 
-  const verifyOtpHandler = async (e) => {};
+  const verifyOtpHandler = async (e) => {
+    e.preventDefault();
+    try {
+      const { data } = await axios.post(
+        '/api/users//update-email/verify-otp',
+        {
+          email,
+          otp,
+        },
+        {
+          headers: { Authorization: `Bearer ${userInfo.token}` },
+        }
+      );
+    } catch (err) {
+      toast.error(getError(err));
+    }
+  };
 
   return (
     <div className='container small-container'>
