@@ -1,7 +1,10 @@
 import express from 'express';
 import bcrypt from 'bcryptjs';
+import _ from 'lodash';
+import otpGenerator from 'otp-generator';
 import expressAsyncHandler from 'express-async-handler';
 import User from '../models/userModel.js';
+import Otp from '../models/otpModel.js';
 import { generateToken, isAuth } from '../utils.js';
 
 const userRouter = express.Router();
@@ -143,6 +146,32 @@ userRouter.post(
       res.status(404).send({ message: 'User not found' });
     }
   })
+);
+
+userRouter.post(
+  '/email-otp',
+  isAuth,
+  expressAsyncHandler(async (req, res) => {
+    const OTP = otpGenerator.generate(6);
+
+    const email = req.body.email;
+
+    const otp = new Otp({ email: email, otp: OTP });
+
+    const salt = await bcrypt.genSalt(10);
+
+    otp.otp = await bcrypt.hash(otp.otp, salt);
+
+    const result = await otp.save();
+
+    return res.status(200).send({ message: 'OTP sent successfully' });
+  })
+);
+
+userRouter.post(
+  '/update-email/verify',
+  isAuth,
+  expressAsyncHandler(async (req, res) => {})
 );
 
 export default userRouter;
