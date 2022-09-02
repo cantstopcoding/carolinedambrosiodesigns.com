@@ -74,12 +74,16 @@ export default function UpdateEmailScreen() {
         }
       );
 
-      ctxDispatch({ type: 'USER_SIGNIN', payload: data });
-      localStorage.setItem('userInfo', JSON.stringify(data));
+      addUpdatedUserToLocalStorage(data);
 
       toast.success('Email updated successfully');
     } catch (err) {
       toast.error(getError(err));
+    }
+
+    function addUpdatedUserToLocalStorage(data) {
+      ctxDispatch({ type: 'USER_SIGNIN', payload: data });
+      localStorage.setItem('userInfo', JSON.stringify(data));
     }
   };
 
