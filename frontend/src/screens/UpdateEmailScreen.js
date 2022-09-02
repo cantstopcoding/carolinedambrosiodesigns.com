@@ -13,6 +13,7 @@ export default function UpdateEmailScreen() {
   const [password, setPassword] = useState('');
   const [confirmPasswordToProceed, setConfirmPasswordToProceed] =
     useState(false);
+  const [otpIsSent, setOtpIsSent] = useState(false);
   const [otp, setOtp] = useState('');
 
   const confirmPasswordToProceedHandler = async (e) => {
@@ -36,7 +37,7 @@ export default function UpdateEmailScreen() {
     }
   };
 
-  const submitHandler = async (e) => {
+  const sendOtpToNewEmail = async (e) => {
     e.preventDefault();
 
     try {
@@ -49,6 +50,7 @@ export default function UpdateEmailScreen() {
           headers: { Authorization: `Bearer ${userInfo.token}` },
         }
       );
+      setOtpIsSent(true);
       console.log('data:', data);
       toast.success(data.message);
     } catch (err) {
@@ -64,30 +66,18 @@ export default function UpdateEmailScreen() {
         <title>Change your email</title>
       </Helmet>
       {displayCertainFormHandler()}
-      <form onSubmit={submitHandler}>
-        <Form.Group className='mb-3' controlId='otp'>
-          <Form.Label>Confirm OTP</Form.Label>
-          <Form.Control value={otp} onChange={(e) => setOtp(e.target.value)} />
-        </Form.Group>
-
-        <div className='mb-3'>
-          <Button type='submit'>Proceed</Button>
-        </div>
-      </form>
     </div>
   );
 
   function displayCertainFormHandler() {
-    if (confirmPasswordToProceed) {
-      return newEmailAddressForm();
-    } else {
-      return confirmPasswordForm();
-    }
+    if (confirmPasswordToProceed && otpIsSent) return verifyOtpForm();
+    if (confirmPasswordToProceed) return newEmailAddressForm();
+    return confirmPasswordForm();
   }
 
   function newEmailAddressForm() {
     return (
-      <form onSubmit={verifyOtpHandler}>
+      <form onSubmit={sendOtpToNewEmail}>
         <Form.Group className='mb-3' controlId='email'>
           <Form.Label>New Email</Form.Label>
           <Form.Control
@@ -114,6 +104,21 @@ export default function UpdateEmailScreen() {
             type='password'
             onChange={(e) => setPassword(e.target.value)}
           />
+        </Form.Group>
+
+        <div className='mb-3'>
+          <Button type='submit'>Proceed</Button>
+        </div>
+      </form>
+    );
+  }
+
+  function verifyOtpForm() {
+    return (
+      <form onSubmit={verifyOtpHandler}>
+        <Form.Group className='mb-3' controlId='otp'>
+          <Form.Label>Confirm OTP</Form.Label>
+          <Form.Control value={otp} onChange={(e) => setOtp(e.target.value)} />
         </Form.Group>
 
         <div className='mb-3'>
