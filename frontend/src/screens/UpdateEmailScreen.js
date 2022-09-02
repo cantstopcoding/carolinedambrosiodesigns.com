@@ -53,7 +53,6 @@ export default function UpdateEmailScreen() {
         }
       );
       setOtpIsSent(true);
-      console.log('data:', data);
       toast.success(data.message);
     } catch (err) {
       toast.error(getError(err));
@@ -75,8 +74,10 @@ export default function UpdateEmailScreen() {
         }
       );
 
-      const emailUpdatedSuccessfully = data.message;
-      toast.success(emailUpdatedSuccessfully);
+      ctxDispatch({ type: 'USER_SIGNIN', payload: data });
+      localStorage.setItem('userInfo', JSON.stringify(data));
+
+      toast.success('Email updated successfully');
     } catch (err) {
       toast.error(getError(err));
     }
