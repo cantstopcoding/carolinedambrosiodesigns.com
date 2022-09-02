@@ -182,10 +182,10 @@ userRouter.post(
     const validUser = bcrypt.compareSync(req.body.otp, lastOtpGenerated.otp);
 
     if (lastOtpGenerated.newEmail === req.body.newEmail && validUser) {
-      // const user = await User.findOne(req.user._id);
-      // user.email = req.body.newEmail;
-      // await user.save();
-      // return res.status(200).send({ message: 'Email updated successfully' });
+      const user = await User.findOne({ email: req.body.currentEmail });
+      user.email = req.body.newEmail;
+      await user.save();
+      return res.status(200).send({ message: 'Email updated successfully' });
     } else {
       return res.status(400).send({ message: 'Your OTP was wrong' });
     }
