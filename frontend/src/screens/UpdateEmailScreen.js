@@ -9,6 +9,7 @@ import { getError } from '../utils';
 export default function UpdateEmailScreen() {
   const { state, dispatch: ctxDispatch } = useContext(Store);
   const { userInfo } = state;
+  const currentEmail = userInfo.email;
   const [newEmail, setNewEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPasswordToProceed, setConfirmPasswordToProceed] =
@@ -65,6 +66,7 @@ export default function UpdateEmailScreen() {
       const { data } = await axios.post(
         '/api/users//update-email/verify-otp',
         {
+          currentEmail,
           newEmail,
           otp,
         },
@@ -72,6 +74,9 @@ export default function UpdateEmailScreen() {
           headers: { Authorization: `Bearer ${userInfo.token}` },
         }
       );
+
+      const emailUpdatedSuccessfully = data.message;
+      toast.success(emailUpdatedSuccessfully);
     } catch (err) {
       toast.error(getError(err));
     }
