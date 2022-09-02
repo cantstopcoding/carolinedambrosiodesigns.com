@@ -5,7 +5,7 @@ import otpGenerator from 'otp-generator';
 import expressAsyncHandler from 'express-async-handler';
 import User from '../models/userModel.js';
 import Otp from '../models/otpModel.js';
-import { generateToken, isAuth } from '../utils.js';
+import { generateToken, isAuth, mailgun, otpEmailTemplate } from '../utils.js';
 
 const userRouter = express.Router();
 
@@ -157,6 +157,8 @@ userRouter.post(
 
     const newEmail = req.body.newEmail;
 
+    const name = req.body.name;
+
     const otpModel = new Otp({ newEmail: newEmail, otp: otpCharacters });
 
     const salt = await bcrypt.genSalt(10);
@@ -164,6 +166,27 @@ userRouter.post(
     otpModel.otp = await bcrypt.hash(otpModel.otp, salt);
 
     const result = await otpModel.save();
+
+    mailgun()
+      .messages()
+      .send(
+        {
+          from: 'Caroline <carolinemg@sandbox59d19782dd3640acace1d6efef1a3e2d.mailgun.org>',
+          to: `${name} <${newEmail}>`,
+          subject: `${otpCharacters} is your verification code`,
+          html: otpEmailTemplate(otpCharacters),
+        },
+        (error, body) => {
+          if (error) {
+            console.log(error);
+          }
+          console.log(
+            body,
+            'send was successful!',
+            'Keep trying, with equinimity, clarity, kindness and compassion.'
+          );
+        }
+      );
 
     return res.status(200).send({ message: 'OTP sent successfully' });
   })
