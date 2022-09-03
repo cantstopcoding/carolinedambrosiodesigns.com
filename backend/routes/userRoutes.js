@@ -151,6 +151,11 @@ userRouter.post(
 userRouter.post(
   '/forgot-password',
   expressAsyncHandler(async (req, res) => {
+    const user = await User.findOne({ email: req.body.email });
+    if (!user) {
+      res.status(404).send({ message: 'Email not associated with an account' });
+    }
+
     const otpCharacters = otpGenerator.generate(6);
     console.log('otpCharacters:', otpCharacters);
 
@@ -230,6 +235,17 @@ userRouter.post(
     }
   })
 );
+
+userRouter.post('/forgot-password/update-password', async (req, res) => {
+  const user = await User.findOne({ email: req.body.email });
+
+  if (user) {
+    user.password = bcrypt.hashSync(req.body.password, 8);
+    sendUpdatedUser(user, res);
+  } else {
+    res.status(404).send({ message: 'User Not Found' });
+  }
+});
 
 userRouter.post(
   '/update-email/verify-otp',
