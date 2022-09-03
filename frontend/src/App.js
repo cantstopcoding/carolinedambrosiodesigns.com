@@ -38,6 +38,7 @@ import ProductCreateScreen from './screens/ProductCreateScreen';
 import Banner from './assets/Banner.jpg';
 import PasswordScreen from './screens/PasswordScreen';
 import UpdateEmailScreen from './screens/UpdateEmailScreen';
+import PasswordForgotScreen from './screens/PasswordForgotScreen';
 
 function App() {
   const { state, dispatch: ctxDispatch } = useContext(Store);
@@ -191,6 +192,10 @@ function App() {
                     <ProfileEditScreen />
                   </ProtectedRoute>
                 }
+              />
+              <Route
+                path='/forgotpassword'
+                element={<PasswordForgotScreen />}
               />
               <Route
                 path='/settings/password'
