@@ -52,11 +52,11 @@ export default function PasswordForgotScreen() {
       </Helmet>
 
       {displayCertainFormHandler()}
-      {updatePasswordForm()}
     </div>
   );
 
   function displayCertainFormHandler() {
+    if (otpIsSent && optIsCorrect) return updatePasswordForm();
     if (otpIsSent) return verifyOtpForm();
 
     return emailAddressForm();
@@ -65,8 +65,11 @@ export default function PasswordForgotScreen() {
   function verifyOtpForm() {
     return (
       <form onSubmit={verifyOtpHandler}>
-        <h1>We sent you a code</h1>
-        <p>Enter it below to verify your email.</p>
+        <h1>Check your email</h1>
+        <p>
+          You'll receive a code to verify here so you can reset your account
+          password.
+        </p>
         <Form.Group className='mb-3' controlId='otp'>
           <Form.Label>Verification Code</Form.Label>
           <Form.Control value={otp} onChange={(e) => setOtp(e.target.value)} />
@@ -103,6 +106,12 @@ export default function PasswordForgotScreen() {
   function updatePasswordForm() {
     return (
       <form onSubmit={updatePasswordHandler}>
+        <h1>Reset your password</h1>
+        <p>
+          Strong passwords include numbers, letters, and punctuation marks.
+          Resetting your password will log you out of all your active sessions.
+        </p>
+        <br />
         {newPasswordField()}
         {confirmPasswordField()}
         <div className='mb-3'>
