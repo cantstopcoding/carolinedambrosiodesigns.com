@@ -63,6 +63,7 @@ export default function SigninScreen() {
             required
             onChange={(e) => setPassword(e.target.value)}
           />
+          <Link to='/forgotpassword'>Forgot Password?</Link>
         </Form.Group>
         <div className='mb-3'>
           <Button type='submit'>Sign In</Button>
