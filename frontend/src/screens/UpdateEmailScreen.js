@@ -94,7 +94,6 @@ export default function UpdateEmailScreen() {
       <Helmet>
         <title>Change your email</title>
       </Helmet>
-      <br />
       {displayCertainFormHandler()}
     </div>
   );
