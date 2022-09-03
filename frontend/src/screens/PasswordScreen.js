@@ -42,9 +42,6 @@ export default function PasswordScreen() {
       resetInputFields();
       toast.success('Password updated successfully');
     } catch (err) {
-      // dispatch({
-      //   type: 'FETCH_FAIL',
-      // });
       toast.error(getError(err));
     }
 
