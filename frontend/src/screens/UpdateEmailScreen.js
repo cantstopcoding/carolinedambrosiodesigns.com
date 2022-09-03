@@ -94,6 +94,7 @@ export default function UpdateEmailScreen() {
       <Helmet>
         <title>Change your email</title>
       </Helmet>
+      <br />
       {displayCertainFormHandler()}
     </div>
   );
@@ -107,8 +108,14 @@ export default function UpdateEmailScreen() {
   function newEmailAddressForm() {
     return (
       <form onSubmit={sendOtpToNewEmail}>
+        <h1>Change your email</h1>
+        <p>
+          {`Your current email is ${currentEmail}. What would you like to
+          update it to? `}
+        </p>
+        <br />
         <Form.Group className='mb-3' controlId='newEmail'>
-          <Form.Label>New Email</Form.Label>
+          <Form.Label>New Email:</Form.Label>
           <Form.Control
             value={newEmail}
             type='email'
@@ -126,15 +133,17 @@ export default function UpdateEmailScreen() {
   function confirmPasswordForm() {
     return (
       <form onSubmit={confirmPasswordToProceedHandler}>
+        <h1>Verify your password</h1>
+        <p>Re-enter your password to continue.</p>
+        <br />
         <Form.Group className='mb-3' controlId='password'>
-          <Form.Label>Password</Form.Label>
+          <Form.Label>Password:</Form.Label>
           <Form.Control
             value={password}
             type='password'
             onChange={(e) => setPassword(e.target.value)}
           />
         </Form.Group>
-
         <div className='mb-3'>
           <Button type='submit'>Proceed</Button>
         </div>
@@ -145,11 +154,12 @@ export default function UpdateEmailScreen() {
   function verifyOtpForm() {
     return (
       <form onSubmit={verifyOtpHandler}>
+        <h1>We sent you a code</h1>
+        <p>Enter it below to verify your email.</p>
         <Form.Group className='mb-3' controlId='otp'>
-          <Form.Label>Confirm OTP</Form.Label>
+          <Form.Label>Verification Code</Form.Label>
           <Form.Control value={otp} onChange={(e) => setOtp(e.target.value)} />
         </Form.Group>
-
         <div className='mb-3'>
           <Button type='submit'>Proceed</Button>
         </div>
