@@ -236,11 +236,14 @@ userRouter.post(
   })
 );
 
-userRouter.post('/forgot-password/update-password', async (req, res) => {
+userRouter.put('/forgot-password/update-password', async (req, res) => {
   const user = await User.findOne({ email: req.body.email });
 
   if (user) {
-    user.password = bcrypt.hashSync(req.body.password, 8);
+    if (!req.body.newPassword) {
+      return res.status(400).send({ message: 'Password is required' });
+    }
+    user.password = bcrypt.hashSync(req.body.newPassword, 8);
     sendUpdatedUser(user, res);
   } else {
     res.status(404).send({ message: 'User Not Found' });
