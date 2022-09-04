@@ -43,7 +43,21 @@ export default function PasswordForgotScreen() {
     }
   };
 
-  const updatePasswordHandler = async (e) => {};
+  const updatePasswordHandler = async (e) => {
+    e.preventDefault();
+    try {
+      const { data } = await axios.put(
+        '/api/users/forgot-password/update-password',
+        {
+          email,
+          newPassword,
+        }
+      );
+      toast.success(data.message);
+    } catch (err) {
+      toast.error(getError(err));
+    }
+  };
 
   return (
     <div className='container small-container'>
@@ -88,7 +102,7 @@ export default function PasswordForgotScreen() {
         <p>Enter the email address associated with your account.</p>
         <br />
         <Form.Group className='mb-3' controlId='email'>
-          <Form.Label>New Email:</Form.Label>
+          <Form.Label>Email:</Form.Label>
           <Form.Control
             value={email}
             type='email'
