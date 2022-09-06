@@ -6,7 +6,7 @@ import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { getError } from '../utils';
 
-export default function PasswordForgotScreen() {
+export default function PasswordForgotScreen(props) {
   const navigate = useNavigate();
   const [email, setEmail] = useState('');
   const [otp, setOtp] = useState('');
@@ -55,6 +55,7 @@ export default function PasswordForgotScreen() {
           newPassword,
         }
       );
+      props.signUserOut();
       navigate('/signin');
       toast.success('Password updated successfully');
     } catch (err) {
