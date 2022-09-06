@@ -5,7 +5,13 @@ import otpGenerator from 'otp-generator';
 import expressAsyncHandler from 'express-async-handler';
 import User from '../models/userModel.js';
 import Otp from '../models/otpModel.js';
-import { generateToken, isAuth, mailgun, otpEmailTemplate } from '../utils.js';
+import {
+  generateToken,
+  isAuth,
+  mailgun,
+  otpEmailTemplate,
+  otpEmailTemplateForForgotPassword,
+} from '../utils.js';
 
 const userRouter = express.Router();
 
@@ -156,6 +162,8 @@ userRouter.post(
       res.status(404).send({ message: 'Email not associated with an account' });
     }
 
+    const name = user.name;
+
     const otpCharacters = otpGenerator.generate(6);
     console.log('otpCharacters:', otpCharacters);
 
@@ -168,6 +176,23 @@ userRouter.post(
     otpModel.otp = await bcrypt.hash(otpModel.otp, salt);
 
     const result = await otpModel.save();
+
+    mailgun()
+      .messages()
+      .send(
+        {
+          from: 'Caroline <carolinemg@sandbox59d19782dd3640acace1d6efef1a3e2d.mailgun.org>',
+          to: `${name} <${email}>`,
+          subject: `Password Reset Request`,
+          html: otpEmailTemplateForForgotPassword(otpCharacters, email),
+        },
+        (error, body) => {
+          if (error) {
+            console.log(error);
+          }
+          console.log(body, 'send was successful!');
+        }
+      );
 
     return res.status(200).send({ message: 'OTP sent successfully' });
   })
