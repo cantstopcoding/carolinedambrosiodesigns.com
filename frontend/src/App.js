@@ -39,10 +39,12 @@ import Banner from './assets/Banner.jpg';
 import PasswordScreen from './screens/PasswordScreen';
 import UpdateEmailScreen from './screens/UpdateEmailScreen';
 import PasswordForgotScreen from './screens/PasswordForgotScreen';
+import EmailVerifyScreen from './screens/EmailVerifyScreen';
 
 function App() {
   const { state, dispatch: ctxDispatch } = useContext(Store);
   const { cart, userInfo } = state;
+  console.log('userInfo:', userInfo);
 
   const signoutHandler = () => {
     if (window.confirm('Are you sure you want to sign out?')) {
@@ -191,6 +193,7 @@ function App() {
                   </ProtectedRoute>
                 }
               />
+              <Route path='/verify-email' element={<EmailVerifyScreen />} />
               <Route
                 path='/forgotpassword'
                 element={<PasswordForgotScreen signUserOut={signUserOut} />}
@@ -233,7 +236,6 @@ function App() {
                 element={<ShippingAddressScreen />}
               ></Route>
               <Route path='/payment' element={<PaymentMethodScreen />}></Route>
-              {/* Admin Routes */}
               <Route
                 path='/admin/dashboard'
                 element={
