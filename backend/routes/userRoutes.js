@@ -93,6 +93,7 @@ userRouter.post(
           _id: user._id,
           name: user.name,
           email: user.email,
+          emailVerified: user.emailVerified,
           isAdmin: user.isAdmin,
           token: generateToken(user),
         });
@@ -122,6 +123,7 @@ userRouter.post(
         name: user.name,
         email: user.email,
         isAdmin: user.isAdmin,
+        emailVerified: user.emailVerified,
         token: generateToken(user),
       };
 
