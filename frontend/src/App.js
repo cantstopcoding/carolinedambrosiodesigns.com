@@ -49,7 +49,6 @@ function App() {
     localStorage.removeItem('userInfo');
     localStorage.removeItem('shippingAddress');
     localStorage.removeItem('paymentMethod');
-    window.location.href = '/signin';
   };
 
   const [sidebarIsOpen, setSidebarIsOpen] = useState(false);
@@ -115,7 +114,7 @@ function App() {
                       <NavDropdown.Divider />
                       <Link
                         className='dropdown-item'
-                        to='#signout'
+                        to='/signin'
                         onClick={signoutHandler}
                       >
                         Sign Out
