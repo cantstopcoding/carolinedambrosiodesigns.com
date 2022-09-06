@@ -45,10 +45,12 @@ function App() {
   const { cart, userInfo } = state;
 
   const signoutHandler = () => {
-    ctxDispatch({ type: 'USER_SIGNOUT' });
-    localStorage.removeItem('userInfo');
-    localStorage.removeItem('shippingAddress');
-    localStorage.removeItem('paymentMethod');
+    if (window.confirm('Are you sure you want to sing out?')) {
+      ctxDispatch({ type: 'USER_SIGNOUT' });
+      localStorage.removeItem('userInfo');
+      localStorage.removeItem('shippingAddress');
+      localStorage.removeItem('paymentMethod');
+    }
   };
 
   const [sidebarIsOpen, setSidebarIsOpen] = useState(false);
