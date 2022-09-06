@@ -47,6 +47,10 @@ export default function PasswordForgotScreen(props) {
 
   const updatePasswordHandler = async (e) => {
     e.preventDefault();
+    if (passwordNotConfirmed()) {
+      toast.error('Passwords do not match');
+      return;
+    }
     try {
       const { data } = await axios.put(
         '/api/users/forgot-password/update-password',
@@ -72,6 +76,10 @@ export default function PasswordForgotScreen(props) {
       {displayCertainFormHandler()}
     </div>
   );
+
+  function passwordNotConfirmed() {
+    return newPassword !== confirmPassword;
+  }
 
   function displayCertainFormHandler() {
     if (otpIsSent && optIsCorrect) return updatePasswordForm();
