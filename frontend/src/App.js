@@ -46,10 +46,7 @@ function App() {
 
   const signoutHandler = () => {
     if (window.confirm('Are you sure you want to sign out?')) {
-      ctxDispatch({ type: 'USER_SIGNOUT' });
-      localStorage.removeItem('userInfo');
-      localStorage.removeItem('shippingAddress');
-      localStorage.removeItem('paymentMethod');
+      signUserOut();
     }
   };
 
@@ -196,7 +193,7 @@ function App() {
               />
               <Route
                 path='/forgotpassword'
-                element={<PasswordForgotScreen />}
+                element={<PasswordForgotScreen signUserOut={signUserOut} />}
               />
               <Route
                 path='/settings/password'
@@ -303,6 +300,13 @@ function App() {
       </div>
     </BrowserRouter>
   );
+
+  function signUserOut() {
+    ctxDispatch({ type: 'USER_SIGNOUT' });
+    localStorage.removeItem('userInfo');
+    localStorage.removeItem('shippingAddress');
+    localStorage.removeItem('paymentMethod');
+  }
 }
 
 export default App;
