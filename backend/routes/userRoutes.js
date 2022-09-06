@@ -5,7 +5,13 @@ import otpGenerator from 'otp-generator';
 import expressAsyncHandler from 'express-async-handler';
 import User from '../models/userModel.js';
 import Otp from '../models/otpModel.js';
-import { generateToken, isAuth, mailgun, otpEmailTemplate } from '../utils.js';
+import {
+  generateToken,
+  isAuth,
+  mailgun,
+  otpEmailTemplate,
+  otpEmailTemplateForForgotPassword,
+} from '../utils.js';
 
 const userRouter = express.Router();
 
@@ -149,6 +155,50 @@ userRouter.post(
 );
 
 userRouter.post(
+  '/forgot-password',
+  expressAsyncHandler(async (req, res) => {
+    const user = await User.findOne({ email: req.body.email });
+    if (!user) {
+      res.status(404).send({ message: 'Email not associated with an account' });
+    }
+
+    const name = user.name;
+
+    const otpCharacters = otpGenerator.generate(6);
+    console.log('otpCharacters:', otpCharacters);
+
+    const email = req.body.email;
+
+    const otpModel = new Otp({ email: email, otp: otpCharacters });
+
+    const salt = await bcrypt.genSalt(10);
+
+    otpModel.otp = await bcrypt.hash(otpModel.otp, salt);
+
+    const result = await otpModel.save();
+
+    mailgun()
+      .messages()
+      .send(
+        {
+          from: 'Caroline <carolinemg@sandbox59d19782dd3640acace1d6efef1a3e2d.mailgun.org>',
+          to: `${name} <${email}>`,
+          subject: `Password Reset Request`,
+          html: otpEmailTemplateForForgotPassword(otpCharacters, email),
+        },
+        (error, body) => {
+          if (error) {
+            console.log(error);
+          }
+          console.log(body, 'send was successful!');
+        }
+      );
+
+    return res.status(200).send({ message: 'OTP sent successfully' });
+  })
+);
+
+userRouter.post(
   '/email-otp',
   isAuth,
   expressAsyncHandler(async (req, res) => {
@@ -180,17 +230,50 @@ userRouter.post(
           if (error) {
             console.log(error);
           }
-          console.log(
-            body,
-            'send was successful!',
-            'Keep trying, with equinimity, clarity, kindness and compassion.'
-          );
+          console.log(body, 'send was successful!');
         }
       );
 
     return res.status(200).send({ message: 'OTP sent successfully' });
   })
 );
+
+userRouter.post(
+  '/forgot-password/verify-otp',
+  expressAsyncHandler(async (req, res) => {
+    const otpArray = await Otp.find({ email: req.body.email });
+    if (otpIsExpired()) {
+      return res.status(400).send({ message: 'You used an expired OTP' });
+    }
+    const lastOtpGenerated = otpArray[otpArray.length - 1];
+
+    const validUser = bcrypt.compareSync(req.body.otp, lastOtpGenerated.otp);
+
+    if (lastOtpGenerated.email === req.body.email && validUser) {
+      return res.status(200).send({ message: 'OTP is correct' });
+    } else {
+      return res.status(400).send({ message: 'Your OTP was wrong' });
+    }
+
+    function otpIsExpired() {
+      return otpArray.length === 0;
+    }
+  })
+);
+
+userRouter.put('/forgot-password/update-password', async (req, res) => {
+  const user = await User.findOne({ email: req.body.email });
+
+  if (user) {
+    if (!req.body.newPassword) {
+      return res.status(400).send({ message: 'Password is required' });
+    }
+    user.password = bcrypt.hashSync(req.body.newPassword, 8);
+    sendUpdatedUser(user, res);
+  } else {
+    res.status(404).send({ message: 'User Not Found' });
+  }
+});
 
 userRouter.post(
   '/update-email/verify-otp',

@@ -38,17 +38,16 @@ import ProductCreateScreen from './screens/ProductCreateScreen';
 import Banner from './assets/Banner.jpg';
 import PasswordScreen from './screens/PasswordScreen';
 import UpdateEmailScreen from './screens/UpdateEmailScreen';
+import PasswordForgotScreen from './screens/PasswordForgotScreen';
 
 function App() {
   const { state, dispatch: ctxDispatch } = useContext(Store);
   const { cart, userInfo } = state;
 
   const signoutHandler = () => {
-    ctxDispatch({ type: 'USER_SIGNOUT' });
-    localStorage.removeItem('userInfo');
-    localStorage.removeItem('shippingAddress');
-    localStorage.removeItem('paymentMethod');
-    window.location.href = '/signin';
+    if (window.confirm('Are you sure you want to sign out?')) {
+      signUserOut();
+    }
   };
 
   const [sidebarIsOpen, setSidebarIsOpen] = useState(false);
@@ -114,7 +113,7 @@ function App() {
                       <NavDropdown.Divider />
                       <Link
                         className='dropdown-item'
-                        to='#signout'
+                        to='/signin'
                         onClick={signoutHandler}
                       >
                         Sign Out
@@ -191,6 +190,10 @@ function App() {
                     <ProfileEditScreen />
                   </ProtectedRoute>
                 }
+              />
+              <Route
+                path='/forgotpassword'
+                element={<PasswordForgotScreen signUserOut={signUserOut} />}
               />
               <Route
                 path='/settings/password'
@@ -297,6 +300,13 @@ function App() {
       </div>
     </BrowserRouter>
   );
+
+  function signUserOut() {
+    ctxDispatch({ type: 'USER_SIGNOUT' });
+    localStorage.removeItem('userInfo');
+    localStorage.removeItem('shippingAddress');
+    localStorage.removeItem('paymentMethod');
+  }
 }
 
 export default App;
