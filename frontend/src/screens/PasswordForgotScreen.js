@@ -2,10 +2,12 @@ import axios from 'axios';
 import React, { useState } from 'react';
 import { Button, Form } from 'react-bootstrap';
 import { Helmet } from 'react-helmet-async';
+import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { getError } from '../utils';
 
 export default function PasswordForgotScreen() {
+  const navigate = useNavigate();
   const [email, setEmail] = useState('');
   const [otp, setOtp] = useState('');
   const [otpIsSent, setOtpIsSent] = useState(false);
@@ -53,7 +55,8 @@ export default function PasswordForgotScreen() {
           newPassword,
         }
       );
-      toast.success(data.message);
+      navigate('/signin');
+      toast.success('Password updated successfully');
     } catch (err) {
       toast.error(getError(err));
     }

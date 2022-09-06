@@ -45,7 +45,7 @@ function App() {
   const { cart, userInfo } = state;
 
   const signoutHandler = () => {
-    if (window.confirm('Are you sure you want to sing out?')) {
+    if (window.confirm('Are you sure you want to sign out?')) {
       ctxDispatch({ type: 'USER_SIGNOUT' });
       localStorage.removeItem('userInfo');
       localStorage.removeItem('shippingAddress');
