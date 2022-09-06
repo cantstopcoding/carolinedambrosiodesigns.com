@@ -6,6 +6,7 @@ import { Store } from '../Store';
 import { toast } from 'react-toastify';
 import { getError } from '../utils';
 import axios from 'axios';
+import { Link } from 'react-router-dom';
 
 const reducer = (state, action) => {
   switch (action.type) {
@@ -144,6 +145,7 @@ export default function ProfileEditScreen() {
                   required
                   onChange={(e) => setPassword(e.target.value)}
                 />
+                <Link to='/forgotpassword'>Forgot Password?</Link>
               </Form.Group>
               <div className='mb-3'>
                 <Button type='submit'>Confirm</Button>
