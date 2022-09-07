@@ -107,53 +107,81 @@ userRouter.post(
 userRouter.post(
   '/signup',
   expressAsyncHandler(async (req, res) => {
-    const userPersistsPassword = !!req.body.password;
-    const email = req.body.email;
-    const otpCharacters = otpGenerator.generate(6);
-    const otpModel = new Otp({ email: email, otp: otpCharacters });
-    const salt = await bcrypt.genSalt(10);
-    otpModel.otp = await bcrypt.hash(otpModel.otp, salt);
-    const result = await otpModel.save();
+    if (req.body.otp) {
+      const otpArray = await Otp.find();
 
-    if (userPersistsPassword) {
-      const newUser = new User({
-        name: req.body.name,
-        email: req.body.email,
-        password: bcrypt.hashSync(req.body.password),
-      });
-
-      const user = await newUser.save();
-      if (!user.emailVerified) {
-        mailgun()
-          .messages()
-          .send(
-            {
-              from: 'Caroline <carolinemg@sandbox59d19782dd3640acace1d6efef1a3e2d.mailgun.org>',
-              to: `${user.name} <${user.email}>`,
-              subject: `${otpCharacters} is your verification code`,
-              html: otpEmailTemplate(otpCharacters),
-            },
-            (error, body) => {
-              if (error) {
-                console.log(error);
-              }
-              console.log(body, 'send was successful!');
-            }
-          );
+      if (otpIsExpired()) {
+        return res.status(400).send({ message: 'You used an expired Code' });
       }
 
-      const userInfo = {
-        _id: user._id,
-        name: user.name,
-        email: user.email,
-        isAdmin: user.isAdmin,
-        emailVerified: user.emailVerified,
-        token: generateToken(user),
-      };
+      const lastOtpGenerated = otpArray[otpArray.length - 1];
+      const validUser = bcrypt.compareSync(req.body.otp, lastOtpGenerated.otp);
+      const user = await User.findOne({ email: lastOtpGenerated.email });
 
-      res.send(userInfo);
+      if (validUser) {
+        user.emailVerified = true;
+
+        const userInfo = {
+          _id: user._id,
+          name: user.name,
+          email: user.email,
+          isAdmin: user.isAdmin,
+          emailVerified: user.emailVerified,
+          token: generateToken(user),
+        };
+
+        res.send(userInfo);
+      } else {
+        return res.status(400).send({ message: 'Your OTP was wrong' });
+      }
+      function otpIsExpired() {
+        return otpArray.length === 0;
+      }
     } else {
-      res.status(400).send({ message: 'Password is required' });
+      const userPersistsPassword = !!req.body.password;
+      const otpCharacters = await generateAndSaveOtp(req);
+      console.log('otpCharacters', otpCharacters);
+
+      if (userPersistsPassword) {
+        const newUser = new User({
+          name: req.body.name,
+          email: req.body.email,
+          password: bcrypt.hashSync(req.body.password),
+        });
+
+        const user = await newUser.save();
+        if (!user.emailVerified) {
+          mailgun()
+            .messages()
+            .send(
+              {
+                from: 'Caroline <carolinemg@sandbox59d19782dd3640acace1d6efef1a3e2d.mailgun.org>',
+                to: `${user.name} <${user.email}>`,
+                subject: `${otpCharacters} is your verification code`,
+                html: otpEmailTemplate(otpCharacters),
+              },
+              (error, body) => {
+                if (error) {
+                  console.log(error);
+                }
+                console.log(body, 'send was successful!');
+              }
+            );
+        }
+
+        const userInfo = {
+          _id: user._id,
+          name: user.name,
+          email: user.email,
+          isAdmin: user.isAdmin,
+          emailVerified: user.emailVerified,
+          token: generateToken(user),
+        };
+
+        res.send(userInfo);
+      } else {
+        res.status(400).send({ message: 'Password is required' });
+      }
     }
   })
 );
@@ -333,6 +361,16 @@ userRouter.post(
 );
 
 export default userRouter;
+
+async function generateAndSaveOtp(req) {
+  const email = req.body.email;
+  const otpCharacters = otpGenerator.generate(6);
+  const otpModel = new Otp({ email: email, otp: otpCharacters });
+  const salt = await bcrypt.genSalt(10);
+  otpModel.otp = await bcrypt.hash(otpModel.otp, salt);
+  const result = await otpModel.save();
+  return otpCharacters;
+}
 
 async function sendUpdatedUser(user, response) {
   const updatedUser = await user.save();
