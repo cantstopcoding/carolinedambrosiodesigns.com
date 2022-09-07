@@ -231,11 +231,11 @@ userRouter.post(
     const otpCharacters = otpGenerator.generate(6);
     console.log('otpCharacters:', otpCharacters);
 
-    const newEmail = req.body.newEmail;
+    const email = req.body.newEmail;
 
     const name = req.body.name;
 
-    const otpModel = new Otp({ email: newEmail, otp: otpCharacters });
+    const otpModel = new Otp({ email: email, otp: otpCharacters });
 
     const salt = await bcrypt.genSalt(10);
 
@@ -248,7 +248,7 @@ userRouter.post(
       .send(
         {
           from: 'Caroline <carolinemg@sandbox59d19782dd3640acace1d6efef1a3e2d.mailgun.org>',
-          to: `${name} <${newEmail}>`,
+          to: `${name} <${email}>`,
           subject: `${otpCharacters} is your verification code`,
           html: otpEmailTemplate(otpCharacters),
         },
