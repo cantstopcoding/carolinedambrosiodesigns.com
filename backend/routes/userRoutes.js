@@ -108,6 +108,12 @@ userRouter.post(
   '/signup',
   expressAsyncHandler(async (req, res) => {
     const userPersistsPassword = !!req.body.password;
+    const email = req.body.email;
+    const otpCharacters = otpGenerator.generate(6);
+    const otpModel = new Otp({ email: email, otp: otpCharacters });
+    const salt = await bcrypt.genSalt(10);
+    otpModel.otp = await bcrypt.hash(otpModel.otp, salt);
+    const result = await otpModel.save();
 
     if (userPersistsPassword) {
       const newUser = new User({
@@ -117,6 +123,24 @@ userRouter.post(
       });
 
       const user = await newUser.save();
+      if (!user.emailVerified) {
+        mailgun()
+          .messages()
+          .send(
+            {
+              from: 'Caroline <carolinemg@sandbox59d19782dd3640acace1d6efef1a3e2d.mailgun.org>',
+              to: `${user.name} <${user.email}>`,
+              subject: `${otpCharacters} is your verification code`,
+              html: otpEmailTemplate(otpCharacters),
+            },
+            (error, body) => {
+              if (error) {
+                console.log(error);
+              }
+              console.log(body, 'send was successful!');
+            }
+          );
+      }
 
       const userInfo = {
         _id: user._id,
@@ -206,6 +230,8 @@ userRouter.post(
   expressAsyncHandler(async (req, res) => {
     const otpCharacters = otpGenerator.generate(6);
     console.log('otpCharacters:', otpCharacters);
+
+    const user = await User.findByOne({ email: req.body.email });
 
     const newEmail = req.body.newEmail;
 
