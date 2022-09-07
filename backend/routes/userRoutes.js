@@ -121,6 +121,8 @@ userRouter.post(
       if (validUser) {
         user.emailVerified = true;
 
+        user.save();
+
         const userInfo = {
           _id: user._id,
           name: user.name,
