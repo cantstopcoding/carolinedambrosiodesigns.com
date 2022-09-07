@@ -231,13 +231,11 @@ userRouter.post(
     const otpCharacters = otpGenerator.generate(6);
     console.log('otpCharacters:', otpCharacters);
 
-    const user = await User.findByOne({ email: req.body.email });
-
     const newEmail = req.body.newEmail;
 
     const name = req.body.name;
 
-    const otpModel = new Otp({ newEmail: newEmail, otp: otpCharacters });
+    const otpModel = new Otp({ email: newEmail, otp: otpCharacters });
 
     const salt = await bcrypt.genSalt(10);
 
@@ -307,7 +305,7 @@ userRouter.post(
   '/update-email/verify-otp',
   isAuth,
   expressAsyncHandler(async (req, res) => {
-    const otpArray = await Otp.find({ newEmail: req.body.newEmail });
+    const otpArray = await Otp.find({ email: req.body.newEmail });
     if (otpIsExpired()) {
       return res.status(400).send({ message: 'You used an expired OTP' });
     }
@@ -315,7 +313,7 @@ userRouter.post(
 
     const validUser = bcrypt.compareSync(req.body.otp, lastOtpGenerated.otp);
 
-    if (lastOtpGenerated.newEmail === req.body.newEmail && validUser) {
+    if (lastOtpGenerated.email === req.body.newEmail && validUser) {
       return await updateEmail();
     } else {
       return res.status(400).send({ message: 'Your OTP was wrong' });
