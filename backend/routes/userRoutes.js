@@ -107,7 +107,8 @@ userRouter.post(
 userRouter.post(
   '/signup',
   expressAsyncHandler(async (req, res) => {
-    if (req.body.otp) {
+    const otpIsSent = req.body.otp;
+    if (otpIsSent) {
       const otpArray = await Otp.find();
 
       if (otpIsExpired()) {
@@ -120,19 +121,7 @@ userRouter.post(
 
       if (validUser) {
         user.emailVerified = true;
-
-        user.save();
-
-        const userInfo = {
-          _id: user._id,
-          name: user.name,
-          email: user.email,
-          isAdmin: user.isAdmin,
-          emailVerified: user.emailVerified,
-          token: generateToken(user),
-        };
-
-        res.send(userInfo);
+        sendUser(user, res);
       } else {
         return res.status(400).send({ message: 'Your OTP was wrong' });
       }
@@ -363,6 +352,21 @@ userRouter.post(
 );
 
 export default userRouter;
+
+function sendUser(user, res) {
+  user.save();
+
+  const userInfo = {
+    _id: user._id,
+    name: user.name,
+    email: user.email,
+    isAdmin: user.isAdmin,
+    emailVerified: user.emailVerified,
+    token: generateToken(user),
+  };
+
+  res.send(userInfo);
+}
 
 async function generateAndSaveOtp(req) {
   const email = req.body.email;
