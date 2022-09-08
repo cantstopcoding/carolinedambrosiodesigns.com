@@ -1,6 +1,7 @@
 import axios from 'axios';
 import React, { useContext, useEffect, useState } from 'react';
 import { Button, Form } from 'react-bootstrap';
+import { Helmet } from 'react-helmet-async';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { Store } from '../Store';
@@ -38,6 +39,9 @@ export default function EmailVerifyScreen() {
 
   return (
     <div className='container small-container'>
+      <Helmet>
+        <title>Verify Email</title>
+      </Helmet>
       <form onSubmit={verifyOtpHandler}>
         <h1>We sent you a code</h1>
         <p>Enter it below to verify your email.</p>
