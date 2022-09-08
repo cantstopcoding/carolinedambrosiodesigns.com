@@ -88,6 +88,8 @@ userRouter.post(
     const user = await User.findOne({ email: req.body.email });
 
     if (user) {
+      await sendOtpIfEmailNotVerified(user, req);
+
       if (bcrypt.compareSync(req.body.password, user.password)) {
         res.send({
           _id: user._id,
@@ -141,24 +143,8 @@ userRouter.post(
         });
 
         const user = await newUser.save();
-        if (!user.emailVerified) {
-          mailgun()
-            .messages()
-            .send(
-              {
-                from: 'Caroline <carolinemg@sandbox59d19782dd3640acace1d6efef1a3e2d.mailgun.org>',
-                to: `${user.name} <${user.email}>`,
-                subject: `${otpCharacters} is your verification code`,
-                html: otpEmailTemplate(otpCharacters),
-              },
-              (error, body) => {
-                if (error) {
-                  console.log(error);
-                }
-                console.log(body, 'send was successful!');
-              }
-            );
-        }
+
+        await sendOtpIfEmailNotVerified(user, req);
 
         const userInfo = {
           _id: user._id,
@@ -352,6 +338,28 @@ userRouter.post(
 );
 
 export default userRouter;
+
+async function sendOtpIfEmailNotVerified(user, req) {
+  if (!user.emailVerified) {
+    const otpCharacters = await generateAndSaveOtp(req);
+    mailgun()
+      .messages()
+      .send(
+        {
+          from: 'Caroline <carolinemg@sandbox59d19782dd3640acace1d6efef1a3e2d.mailgun.org>',
+          to: `${user.name} <${user.email}>`,
+          subject: `${otpCharacters} is your verification code`,
+          html: otpEmailTemplate(otpCharacters),
+        },
+        (error, body) => {
+          if (error) {
+            console.log(error);
+          }
+          console.log(body, 'send was successful!');
+        }
+      );
+  }
+}
 
 function sendUser(user, res) {
   user.save();
