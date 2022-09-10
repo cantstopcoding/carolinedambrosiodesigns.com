@@ -108,17 +108,7 @@ userRouter.post(
   expressAsyncHandler(async (req, res) => {
     const userPersistsPassword = !!req.body.password;
 
-    if (passwordDoesNotHaveNumber()) {
-      return res
-        .status(400)
-        .send({ message: 'Password must contain at least one number' });
-    }
-
-    if (passwordDoesNotHaveSpecialCharacter()) {
-      return res.status(400).send({
-        message: 'Password must contain at least one special character',
-      });
-    }
+    checkPasswordRequirements();
 
     if (userPersistsPassword) {
       const newUser = new User({
@@ -142,12 +132,46 @@ userRouter.post(
       res.status(400).send({ message: 'Password is required' });
     }
 
+    function checkPasswordRequirements() {
+      if (passwordIsLessThanEightCharacters()) {
+        return res
+          .status(400)
+          .send({ message: 'Password must be at least 8 characters' });
+      }
+
+      if (passwordDoesNotHaveNumber()) {
+        return res
+          .status(400)
+          .send({ message: 'Password must contain at least one number' });
+      }
+
+      if (passwordDoesNotHaveSpecialCharacter()) {
+        return res.status(400).send({
+          message: 'Password must contain at least one special character',
+        });
+      }
+
+      if (passwordDoesNotHaveUpperCase()) {
+        return res
+          .status(400)
+          .send({ message: 'Password must contain at least one uppercase' });
+      }
+    }
+
     function passwordDoesNotHaveNumber() {
       return /(?=.*\d)/.test(req.body.password) === false;
     }
 
     function passwordDoesNotHaveSpecialCharacter() {
       return !req.body.password.match(/[^a-zA-Z0-9]/);
+    }
+
+    function passwordDoesNotHaveUpperCase() {
+      return !/[A-Z]/.test(req.body.password);
+    }
+
+    function passwordIsLessThanEightCharacters() {
+      return req.body.password.length < 8;
     }
   })
 );
