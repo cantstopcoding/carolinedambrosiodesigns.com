@@ -118,30 +118,34 @@ function ProductScreen() {
       toast.error('Please enter comment and rating');
       return;
     }
-    try {
-      const { data } = await axios.post(
-        `/api/products/${product._id}/reviews`,
-        { rating, comment, name: userInfo.name },
-        {
-          headers: { Authorization: `Bearer ${userInfo.token}` },
-        }
-      );
+    if (window.confirm('Are you sure you want to submit this review?')) {
+      try {
+        const { data } = await axios.post(
+          `/api/products/${product._id}/reviews`,
+          { rating, comment, name: userInfo.name },
+          {
+            headers: { Authorization: `Bearer ${userInfo.token}` },
+          }
+        );
 
-      dispatch({
-        type: 'CREATE_SUCCESS',
-      });
-      toast.success('Review submitted successfully');
-      product.reviews.unshift(data.review);
-      product.numReviews = data.numReviews;
-      product.rating = data.rating;
-      dispatch({ type: 'REFRESH_PRODUCT', payload: product });
-      window.scrollTo({
-        behavior: 'smooth',
-        top: reviewsRef.current.offsetTop,
-      });
-    } catch (error) {
-      toast.error(getError(error));
-      dispatch({ type: 'CREATE_FAIL' });
+        dispatch({
+          type: 'CREATE_SUCCESS',
+        });
+        toast.success('Review submitted successfully');
+        product.reviews.unshift(data.review);
+        product.numReviews = data.numReviews;
+        product.rating = data.rating;
+        dispatch({ type: 'REFRESH_PRODUCT', payload: product });
+        window.scrollTo({
+          behavior: 'smooth',
+          top: reviewsRef.current.offsetTop,
+        });
+        setRating(0);
+        setComment('');
+      } catch (error) {
+        toast.error(getError(error));
+        dispatch({ type: 'CREATE_FAIL' });
+      }
     }
   };
 
@@ -183,12 +187,12 @@ function ProductScreen() {
                 </Button>
               )}
             </ListGroup.Item>
-            <ListGroup.Item>
+            {/* <ListGroup.Item>
               <Rating
                 rating={product.rating}
                 numReviews={product.numReviews}
               ></Rating>
-            </ListGroup.Item>
+            </ListGroup.Item> */}
             <ListGroup.Item>Pirce : ${product.price}</ListGroup.Item>
             <ListGroup.Item>
               <Row xs={1} md={2} className='g-2'>
@@ -252,13 +256,13 @@ function ProductScreen() {
         </Col>
       </Row>
       <div className='my-3'>
-        <h2 ref={reviewsRef}>Reviews</h2>
+        {/* <h2 ref={reviewsRef}>Reviews</h2>
         <div className='mb-3'>
           {product.reviews.length === 0 && (
             <MessageBox>There is no review</MessageBox>
           )}
-        </div>
-        <ListGroup>
+        </div> */}
+        {/* <ListGroup>
           {product.reviews.map((review) => (
             <ListGroup.Item key={review._id}>
               <strong>{review.name}</strong>
@@ -267,8 +271,8 @@ function ProductScreen() {
               <p>{review.comment}</p>
             </ListGroup.Item>
           ))}
-        </ListGroup>
-        <div className='my-3'>
+        </ListGroup> */}
+        {/* <div className='my-3'>
           {userInfo ? (
             <form onSubmit={submitHandler}>
               <h2>Write a customer review</h2>
@@ -316,7 +320,7 @@ function ProductScreen() {
               to write a review
             </MessageBox>
           )}
-        </div>
+        </div> */}
       </div>
     </div>
   );
