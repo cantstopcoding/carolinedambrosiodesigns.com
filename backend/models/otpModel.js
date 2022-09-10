@@ -3,7 +3,8 @@ import mongoose from 'mongoose';
 const expiresIn5Minutes = { expires: 300 };
 const otpSchema = new mongoose.Schema(
   {
-    email: { type: String, required: true },
+    email: { type: String },
+    newEmail: { type: String },
     otp: { type: String, required: true },
     createdAt: { type: Date, default: Date.now, index: expiresIn5Minutes },
   },

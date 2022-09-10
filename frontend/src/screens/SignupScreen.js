@@ -34,12 +34,9 @@ export default function SignupScreen() {
         email,
         password,
       });
-      if (data.emailVerified) {
-        signUserInWith(data);
-      } else {
-        toast.info('Please verify your email address');
-        navigate('/verify-email');
-      }
+      ctxDispatch({ type: 'USER_SIGNIN', payload: data });
+      localStorage.setItem('userInfo', JSON.stringify(data));
+      navigate(redirect || '/');
     } catch (err) {
       toast.error(getError(err));
     }
@@ -98,10 +95,4 @@ export default function SignupScreen() {
       </Form>
     </Container>
   );
-
-  function signUserInWith(data) {
-    ctxDispatch({ type: 'USER_SIGNIN', payload: data });
-    localStorage.setItem('userInfo', JSON.stringify(data));
-    navigate(redirect || '/');
-  }
 }
