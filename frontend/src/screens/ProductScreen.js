@@ -118,30 +118,34 @@ function ProductScreen() {
       toast.error('Please enter comment and rating');
       return;
     }
-    try {
-      const { data } = await axios.post(
-        `/api/products/${product._id}/reviews`,
-        { rating, comment, name: userInfo.name },
-        {
-          headers: { Authorization: `Bearer ${userInfo.token}` },
-        }
-      );
+    if (window.confirm('Are you sure you want to submit this review?')) {
+      try {
+        const { data } = await axios.post(
+          `/api/products/${product._id}/reviews`,
+          { rating, comment, name: userInfo.name },
+          {
+            headers: { Authorization: `Bearer ${userInfo.token}` },
+          }
+        );
 
-      dispatch({
-        type: 'CREATE_SUCCESS',
-      });
-      toast.success('Review submitted successfully');
-      product.reviews.unshift(data.review);
-      product.numReviews = data.numReviews;
-      product.rating = data.rating;
-      dispatch({ type: 'REFRESH_PRODUCT', payload: product });
-      window.scrollTo({
-        behavior: 'smooth',
-        top: reviewsRef.current.offsetTop,
-      });
-    } catch (error) {
-      toast.error(getError(error));
-      dispatch({ type: 'CREATE_FAIL' });
+        dispatch({
+          type: 'CREATE_SUCCESS',
+        });
+        toast.success('Review submitted successfully');
+        product.reviews.unshift(data.review);
+        product.numReviews = data.numReviews;
+        product.rating = data.rating;
+        dispatch({ type: 'REFRESH_PRODUCT', payload: product });
+        window.scrollTo({
+          behavior: 'smooth',
+          top: reviewsRef.current.offsetTop,
+        });
+        setRating(0);
+        setComment('');
+      } catch (error) {
+        toast.error(getError(error));
+        dispatch({ type: 'CREATE_FAIL' });
+      }
     }
   };
 
