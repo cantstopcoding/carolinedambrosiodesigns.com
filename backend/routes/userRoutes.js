@@ -108,6 +108,11 @@ userRouter.post(
   expressAsyncHandler(async (req, res) => {
     const userPersistsPassword = !!req.body.password;
 
+    if (passwordDoesNotHaveNumber()) {
+      return res
+        .status(400)
+        .send({ message: 'Password must contain at least one number' });
+    }
     if (userPersistsPassword) {
       const newUser = new User({
         name: req.body.name,
@@ -128,6 +133,10 @@ userRouter.post(
       res.send(userInfo);
     } else {
       res.status(400).send({ message: 'Password is required' });
+    }
+
+    function passwordDoesNotHaveNumber() {
+      return /(?=.*\d)/.test(req.body.password) === false;
     }
   })
 );
