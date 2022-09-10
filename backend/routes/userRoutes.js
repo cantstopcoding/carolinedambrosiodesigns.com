@@ -113,6 +113,13 @@ userRouter.post(
         .status(400)
         .send({ message: 'Password must contain at least one number' });
     }
+
+    if (passwordDoesNotHaveSpecialCharacter()) {
+      return res.status(400).send({
+        message: 'Password must contain at least one special character',
+      });
+    }
+
     if (userPersistsPassword) {
       const newUser = new User({
         name: req.body.name,
@@ -137,6 +144,10 @@ userRouter.post(
 
     function passwordDoesNotHaveNumber() {
       return /(?=.*\d)/.test(req.body.password) === false;
+    }
+
+    function passwordDoesNotHaveSpecialCharacter() {
+      return !req.body.password.match(/[^a-zA-Z0-9]/);
     }
   })
 );
