@@ -187,12 +187,12 @@ function ProductScreen() {
                 </Button>
               )}
             </ListGroup.Item>
-            <ListGroup.Item>
+            {/* <ListGroup.Item>
               <Rating
                 rating={product.rating}
                 numReviews={product.numReviews}
               ></Rating>
-            </ListGroup.Item>
+            </ListGroup.Item> */}
             <ListGroup.Item>Pirce : ${product.price}</ListGroup.Item>
             <ListGroup.Item>
               <Row xs={1} md={2} className='g-2'>
@@ -256,13 +256,13 @@ function ProductScreen() {
         </Col>
       </Row>
       <div className='my-3'>
-        <h2 ref={reviewsRef}>Reviews</h2>
+        {/* <h2 ref={reviewsRef}>Reviews</h2>
         <div className='mb-3'>
           {product.reviews.length === 0 && (
             <MessageBox>There is no review</MessageBox>
           )}
-        </div>
-        <ListGroup>
+        </div> */}
+        {/* <ListGroup>
           {product.reviews.map((review) => (
             <ListGroup.Item key={review._id}>
               <strong>{review.name}</strong>
@@ -271,8 +271,8 @@ function ProductScreen() {
               <p>{review.comment}</p>
             </ListGroup.Item>
           ))}
-        </ListGroup>
-        <div className='my-3'>
+        </ListGroup> */}
+        {/* <div className='my-3'>
           {userInfo ? (
             <form onSubmit={submitHandler}>
               <h2>Write a customer review</h2>
@@ -320,7 +320,7 @@ function ProductScreen() {
               to write a review
             </MessageBox>
           )}
-        </div>
+        </div> */}
       </div>
     </div>
   );
