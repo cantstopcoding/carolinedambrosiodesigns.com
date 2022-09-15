@@ -7,6 +7,8 @@ import { toast } from 'react-toastify';
 import { getError } from '../utils';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
+import { Col, Row } from 'react-bootstrap';
+import { useNavigate } from 'react-router-dom';
 
 const reducer = (state, action) => {
   switch (action.type) {
@@ -28,9 +30,11 @@ export default function ProfileEditScreen() {
   const [name, setName] = useState(userInfo.name);
   const [email, setEmail] = useState(userInfo.email);
   const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
   const [confirmPasswordToSeeUserInfo, setConfirmPasswordToSeeUserInfo] =
     useState(false);
+  const [disabledValue, setDisabledValue] = useState(true);
+  const columnLength = 10;
+  const navigate = useNavigate();
 
   const [{ loadingUpdate }, dispatch] = useReducer(reducer, {
     loadingUpdate: false,
@@ -38,29 +42,31 @@ export default function ProfileEditScreen() {
 
   const submitHandler = async (e) => {
     e.preventDefault();
-    try {
-      const { data } = await axios.put(
-        '/api/users/profile/edit',
-        {
-          name,
-          email,
-          password,
-        },
-        {
-          headers: { Authorization: `Bearer ${userInfo.token}` },
-        }
-      );
-      dispatch({
-        type: 'UPDATE_SUCCESS',
-      });
-      ctxDispatch({ type: 'USER_SIGNIN', payload: data });
-      localStorage.setItem('userInfo', JSON.stringify(data));
-      toast.success('User updated successfully');
-    } catch (err) {
-      dispatch({
-        type: 'FETCH_FAIL',
-      });
-      toast.error(getError(err));
+    if (window.confirm('Are you sure you want to update your username?')) {
+      try {
+        const { data } = await axios.put(
+          '/api/users/profile/edit',
+          {
+            name,
+            email,
+            password,
+          },
+          {
+            headers: { Authorization: `Bearer ${userInfo.token}` },
+          }
+        );
+        dispatch({
+          type: 'UPDATE_SUCCESS',
+        });
+        ctxDispatch({ type: 'USER_SIGNIN', payload: data });
+        localStorage.setItem('userInfo', JSON.stringify(data));
+        toast.success('User updated successfully');
+      } catch (err) {
+        dispatch({
+          type: 'FETCH_FAIL',
+        });
+        toast.error(getError(err));
+      }
     }
   };
 
@@ -85,6 +91,21 @@ export default function ProfileEditScreen() {
     }
   };
 
+  const updatEmailInput = (e) => {
+    e.preventDefault();
+    setDisabledValue(!disabledValue);
+  };
+
+  const redirectToEditEmail = (e) => {
+    e.preventDefault();
+    navigate('/settings/email');
+  };
+
+  const redirectToEditPassword = (e) => {
+    e.preventDefault();
+    navigate('/settings/password');
+  };
+
   return (
     <div className='container small-container'>
       <Helmet>
@@ -97,34 +118,54 @@ export default function ProfileEditScreen() {
           <form onSubmit={submitHandler}>
             <Form.Group className='mb-3' controlId='name'>
               <Form.Label>Name</Form.Label>
-              <Form.Control
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-                required
-              />
+              <Row>
+                <Col xs={columnLength}>
+                  <Form.Control
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                    disabled={disabledValue}
+                    required
+                  />
+                </Col>
+                <Col>
+                  <Button onClick={updatEmailInput}>Edit</Button>
+                </Col>
+              </Row>
             </Form.Group>
+
             <Form.Group className='mb-3' controlId='name'>
               <Form.Label>Email</Form.Label>
-              <Form.Control
-                type='email'
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                required
-              />
+              <Row>
+                <Col xs={columnLength}>
+                  <Form.Control
+                    disabled
+                    type='email'
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    required
+                  />
+                </Col>
+                <Col>
+                  <Button onClick={redirectToEditEmail}>Edit</Button>
+                </Col>
+              </Row>
             </Form.Group>
+
             <Form.Group className='mb-3' controlId='password'>
               <Form.Label>Password</Form.Label>
-              <Form.Control
-                type='password'
-                onChange={(e) => setPassword(e.target.value)}
-              />
-            </Form.Group>
-            <Form.Group className='mb-3' controlId='password'>
-              <Form.Label>Confirm Password</Form.Label>
-              <Form.Control
-                type='password'
-                onChange={(e) => setConfirmPassword(e.target.value)}
-              />
+              <Row>
+                <Col xs={columnLength}>
+                  <Form.Control
+                    disabled
+                    type='password'
+                    value='********'
+                    onChange={(e) => setPassword(e.target.value)}
+                  />
+                </Col>
+                <Col>
+                  <Button onClick={redirectToEditPassword}>Edit</Button>
+                </Col>
+              </Row>
             </Form.Group>
             <div className='mb-3'>
               <Button type='submit'>Update</Button>
