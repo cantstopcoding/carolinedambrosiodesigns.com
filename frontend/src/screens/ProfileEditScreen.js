@@ -8,6 +8,7 @@ import { getError } from '../utils';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
 import { Col, Row } from 'react-bootstrap';
+import { useNavigate } from 'react-router-dom';
 
 const reducer = (state, action) => {
   switch (action.type) {
@@ -34,6 +35,7 @@ export default function ProfileEditScreen() {
     useState(false);
   const [disabledValue, setDisabledValue] = useState(true);
   const columnLength = 10;
+  const navigate = useNavigate();
 
   const [{ loadingUpdate }, dispatch] = useReducer(reducer, {
     loadingUpdate: false,
@@ -93,6 +95,11 @@ export default function ProfileEditScreen() {
     setDisabledValue(!disabledValue);
   };
 
+  const redirectToEditEmail = (e) => {
+    e.preventDefault();
+    navigate('/settings/email');
+  };
+
   return (
     <div className='container small-container'>
       <Helmet>
@@ -133,7 +140,7 @@ export default function ProfileEditScreen() {
                   />
                 </Col>
                 <Col>
-                  <Button>Edit</Button>
+                  <Button onClick={redirectToEditEmail}>Edit</Button>
                 </Col>
               </Row>
             </Form.Group>
