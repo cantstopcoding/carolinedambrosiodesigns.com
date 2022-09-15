@@ -7,6 +7,7 @@ import { toast } from 'react-toastify';
 import { getError } from '../utils';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
+import { Col, Row } from 'react-bootstrap';
 
 const reducer = (state, action) => {
   switch (action.type) {
@@ -31,6 +32,8 @@ export default function ProfileEditScreen() {
   const [confirmPassword, setConfirmPassword] = useState('');
   const [confirmPasswordToSeeUserInfo, setConfirmPasswordToSeeUserInfo] =
     useState(false);
+  const [disabledValue, setDisabledValue] = useState(true);
+  const columnLength = 10;
 
   const [{ loadingUpdate }, dispatch] = useReducer(reducer, {
     loadingUpdate: false,
@@ -85,6 +88,11 @@ export default function ProfileEditScreen() {
     }
   };
 
+  const updatEmailInput = (e) => {
+    e.preventDefault();
+    setDisabledValue(!disabledValue);
+  };
+
   return (
     <div className='container small-container'>
       <Helmet>
@@ -97,12 +105,19 @@ export default function ProfileEditScreen() {
           <form onSubmit={submitHandler}>
             <Form.Group className='mb-3' controlId='name'>
               <Form.Label>Name</Form.Label>
-              <Form.Control
-                disabled
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-                required
-              />
+              <Row>
+                <Col xs={columnLength}>
+                  <Form.Control
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                    disabled={disabledValue}
+                    required
+                  />
+                </Col>
+                <Col>
+                  <Button onClick={updatEmailInput}>Edit</Button>
+                </Col>
+              </Row>
             </Form.Group>
             <Form.Group className='mb-3' controlId='name'>
               <Form.Label>Email</Form.Label>
