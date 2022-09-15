@@ -98,6 +98,7 @@ export default function ProfileEditScreen() {
             <Form.Group className='mb-3' controlId='name'>
               <Form.Label>Name</Form.Label>
               <Form.Control
+                disabled
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 required
@@ -106,6 +107,7 @@ export default function ProfileEditScreen() {
             <Form.Group className='mb-3' controlId='name'>
               <Form.Label>Email</Form.Label>
               <Form.Control
+                disabled
                 type='email'
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
@@ -115,6 +117,7 @@ export default function ProfileEditScreen() {
             <Form.Group className='mb-3' controlId='password'>
               <Form.Label>Password</Form.Label>
               <Form.Control
+                disabled
                 type='password'
                 onChange={(e) => setPassword(e.target.value)}
               />
