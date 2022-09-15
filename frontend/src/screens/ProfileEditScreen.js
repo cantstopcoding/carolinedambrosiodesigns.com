@@ -119,14 +119,8 @@ export default function ProfileEditScreen() {
               <Form.Control
                 disabled
                 type='password'
+                value='********'
                 onChange={(e) => setPassword(e.target.value)}
-              />
-            </Form.Group>
-            <Form.Group className='mb-3' controlId='password'>
-              <Form.Label>Confirm Password</Form.Label>
-              <Form.Control
-                type='password'
-                onChange={(e) => setConfirmPassword(e.target.value)}
               />
             </Form.Group>
             <div className='mb-3'>
