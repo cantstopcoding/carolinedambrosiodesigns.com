@@ -100,6 +100,11 @@ export default function ProfileEditScreen() {
     navigate('/settings/email');
   };
 
+  const redirectToEditPassword = (e) => {
+    e.preventDefault();
+    navigate('/settings/password');
+  };
+
   return (
     <div className='container small-container'>
       <Helmet>
@@ -157,7 +162,7 @@ export default function ProfileEditScreen() {
                   />
                 </Col>
                 <Col>
-                  <Button>Edit</Button>
+                  <Button onClick={redirectToEditPassword}>Edit</Button>
                 </Col>
               </Row>
             </Form.Group>
