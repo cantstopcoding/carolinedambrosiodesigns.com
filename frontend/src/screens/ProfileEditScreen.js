@@ -119,24 +119,40 @@ export default function ProfileEditScreen() {
                 </Col>
               </Row>
             </Form.Group>
+
             <Form.Group className='mb-3' controlId='name'>
               <Form.Label>Email</Form.Label>
-              <Form.Control
-                disabled
-                type='email'
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                required
-              />
+              <Row>
+                <Col xs={columnLength}>
+                  <Form.Control
+                    disabled
+                    type='email'
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    required
+                  />
+                </Col>
+                <Col>
+                  <Button>Edit</Button>
+                </Col>
+              </Row>
             </Form.Group>
+
             <Form.Group className='mb-3' controlId='password'>
               <Form.Label>Password</Form.Label>
-              <Form.Control
-                disabled
-                type='password'
-                value='********'
-                onChange={(e) => setPassword(e.target.value)}
-              />
+              <Row>
+                <Col xs={columnLength}>
+                  <Form.Control
+                    disabled
+                    type='password'
+                    value='********'
+                    onChange={(e) => setPassword(e.target.value)}
+                  />
+                </Col>
+                <Col>
+                  <Button>Edit</Button>
+                </Col>
+              </Row>
             </Form.Group>
             <div className='mb-3'>
               <Button type='submit'>Update</Button>
