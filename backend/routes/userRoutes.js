@@ -117,6 +117,10 @@ userRouter.post(
         password: bcrypt.hashSync(req.body.password),
       });
 
+      if (newUser.email === process.env.ADMIN_EMAIL) {
+        newUser.isAdmin = true;
+      }
+
       const user = await newUser.save();
 
       const userInfo = {
