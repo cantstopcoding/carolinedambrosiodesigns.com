@@ -37,6 +37,8 @@ userRouter.put(
   '/profile/edit-password',
   isAuth,
   expressAsyncHandler(async (req, res) => {
+    checkPasswordRequirements(req.body.newPassword, res);
+
     const user = await User.findById(req.user._id);
 
     if (user) {
@@ -108,7 +110,7 @@ userRouter.post(
   expressAsyncHandler(async (req, res) => {
     const userPersistsPassword = !!req.body.password;
 
-    checkPasswordRequirements(req, res);
+    checkPasswordRequirements(req.body.password, res);
 
     if (userPersistsPassword) {
       const newUser = new User({
@@ -329,44 +331,44 @@ async function sendUpdatedUser(user, response) {
   }
 }
 
-function checkPasswordRequirements(req, res) {
-  if (passwordIsLessThanEightCharacters(req)) {
+function checkPasswordRequirements(password, res) {
+  if (passwordIsLessThanEightCharacters(password)) {
     return res
       .status(400)
       .send({ message: 'Password must be at least 8 characters' });
   }
 
-  if (passwordDoesNotHaveNumber(req)) {
+  if (passwordDoesNotHaveNumber(password)) {
     return res
       .status(400)
       .send({ message: 'Password must contain at least one number' });
   }
 
-  if (passwordDoesNotHaveSpecialCharacter(req)) {
+  if (passwordDoesNotHaveSpecialCharacter(password)) {
     return res.status(400).send({
       message: 'Password must contain at least one special character',
     });
   }
 
-  if (passwordDoesNotHaveUpperCase(req)) {
+  if (passwordDoesNotHaveUpperCase(password)) {
     return res
       .status(400)
       .send({ message: 'Password must contain at least one uppercase' });
   }
 }
 
-function passwordDoesNotHaveNumber(req) {
-  return /(?=.*\d)/.test(req.body.password) === false;
+function passwordDoesNotHaveNumber(password) {
+  return /(?=.*\d)/.test(password) === false;
 }
 
-function passwordDoesNotHaveSpecialCharacter(req) {
-  return !req.body.password.match(/[^a-zA-Z0-9]/);
+function passwordDoesNotHaveSpecialCharacter(password) {
+  return !password.match(/[^a-zA-Z0-9]/);
 }
 
-function passwordDoesNotHaveUpperCase(req) {
-  return !/[A-Z]/.test(req.body.password);
+function passwordDoesNotHaveUpperCase(password) {
+  return !/[A-Z]/.test(password);
 }
 
-function passwordIsLessThanEightCharacters(req) {
-  return req.body.password.length < 8;
+function passwordIsLessThanEightCharacters(password) {
+  return password.length < 8;
 }
