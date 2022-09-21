@@ -357,12 +357,16 @@ userRouter.post(
 export default userRouter;
 
 async function sendUpdatedUser(user, response) {
-  const updatedUser = await user.save();
-  response.send({
-    _id: updatedUser._id,
-    name: updatedUser.name,
-    email: updatedUser.email,
-    isAdmin: updatedUser.isAdmin,
-    token: generateToken(updatedUser),
-  });
+  try {
+    const updatedUser = await user.save();
+    response.send({
+      _id: updatedUser._id,
+      name: updatedUser.name,
+      email: updatedUser.email,
+      isAdmin: updatedUser.isAdmin,
+      token: generateToken(updatedUser),
+    });
+  } catch (error) {
+    response.status(500).send({ message: error.message });
+  }
 }
