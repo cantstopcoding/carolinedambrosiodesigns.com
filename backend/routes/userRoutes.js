@@ -271,11 +271,13 @@ userRouter.post(
 
 userRouter.put('/forgot-password/update-password', async (req, res) => {
   const user = await User.findOne({ email: req.body.email });
+  checkPasswordRequirements(req.body.newPassword, res);
 
   if (user) {
     if (!req.body.newPassword) {
       return res.status(400).send({ message: 'Password is required' });
     }
+
     user.password = bcrypt.hashSync(req.body.newPassword, 8);
     sendUpdatedUser(user, res);
   } else {
@@ -327,7 +329,7 @@ async function sendUpdatedUser(user, response) {
       token: generateToken(updatedUser),
     });
   } catch (error) {
-    response.status(500).send({ message: error.message });
+    console.log('error:', error);
   }
 }
 
