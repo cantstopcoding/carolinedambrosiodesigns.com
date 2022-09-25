@@ -1,4 +1,5 @@
 import mongoose from 'mongoose';
+import uniqueValidator from 'mongoose-unique-validator';
 
 const userSchema = new mongoose.Schema(
   {
@@ -19,5 +20,10 @@ const userSchema = new mongoose.Schema(
   }
 );
 
+userSchema.plugin(uniqueValidator, {
+  message: 'Error, expected {PATH} to be unique.',
+});
+
 const User = mongoose.model('User', userSchema);
+
 export default User;
