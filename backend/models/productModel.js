@@ -1,4 +1,5 @@
 import mongoose from 'mongoose';
+import uniqueValidator from 'mongoose-unique-validator';
 
 const reviewSchema = new mongoose.Schema(
   {
@@ -31,6 +32,10 @@ const productSchema = new mongoose.Schema(
     timestamps: true,
   }
 );
+
+productSchema.plugin(uniqueValidator, {
+  message: 'Error, expected {PATH} to be unique.',
+});
 
 const Product = mongoose.model('Product', productSchema);
 export default Product;
