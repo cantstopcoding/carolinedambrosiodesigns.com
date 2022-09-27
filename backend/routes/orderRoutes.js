@@ -141,7 +141,7 @@ orderRouter.put(
         .messages()
         .send(
           {
-            from: 'Caroline <carolinemg@sandbox59d19782dd3640acace1d6efef1a3e2d.mailgun.org>',
+            from: 'Caroline DAmbrosio Designs <carolinedambrosiodesigns@gmail.com>',
             to: `${order.user.name} <${order.user.email}>`,
             subject: `New order ${order._id}`,
             html: payOrderEmailTemplate(order),

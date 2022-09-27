@@ -192,7 +192,7 @@ userRouter.post(
       .messages()
       .send(
         {
-          from: 'Caroline <carolinemg@sandbox59d19782dd3640acace1d6efef1a3e2d.mailgun.org>',
+          from: 'Caroline DAmbrosio Designs <carolinedambrosiodesigns@gmail.com>',
           to: `${name} <${email}>`,
           subject: `Password Reset Request`,
           html: otpEmailTemplateForForgotPassword(otpCharacters, email),
@@ -232,7 +232,7 @@ userRouter.post(
       .messages()
       .send(
         {
-          from: 'Caroline <carolinemg@sandbox59d19782dd3640acace1d6efef1a3e2d.mailgun.org>',
+          from: 'Caroline DAmbrosio Designs <carolinecarolinedambrosiodesigns@gmail.com>',
           to: `${name} <${newEmail}>`,
           subject: `${otpCharacters} is your verification code`,
           html: otpEmailTemplate(otpCharacters),
