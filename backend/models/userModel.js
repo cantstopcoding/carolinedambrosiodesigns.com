@@ -27,10 +27,14 @@ const userSchema = new mongoose.Schema(
   }
 );
 
-userSchema.plugin(uniqueValidator, {
-  message: 'Error, expected {PATH} to be unique.',
-});
+addUniqueValidatorToUserSchema();
 
 const User = mongoose.model('User', userSchema);
 
 export default User;
+
+function addUniqueValidatorToUserSchema() {
+  userSchema.plugin(uniqueValidator, {
+    message: 'Error, expected {PATH} to be unique.',
+  });
+}
