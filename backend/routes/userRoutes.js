@@ -12,6 +12,7 @@ import {
   otpEmailTemplate,
   otpEmailTemplateForForgotPassword,
 } from '../utils.js';
+import limitter from 'express-rate-limit';
 
 const userRouter = express.Router();
 
@@ -35,6 +36,7 @@ userRouter.put(
 
 userRouter.put(
   '/profile/edit-password',
+  updatePasswordLimitter(),
   isAuth,
   expressAsyncHandler(async (req, res) => {
     checkPasswordRequirements(req.body.newPassword, res);
@@ -317,6 +319,19 @@ userRouter.post(
 );
 
 export default userRouter;
+
+function updatePasswordLimitter() {
+  const fifteenMinutes = 15 * 60 * 1000;
+
+  return limitter({
+    windowMs: fifteenMinutes,
+    max: 5,
+    message: {
+      code: 429,
+      message: 'Too many requests, please try again later',
+    },
+  });
+}
 
 async function sendUpdatedUser(user, response) {
   try {
