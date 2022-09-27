@@ -36,7 +36,7 @@ userRouter.put(
 
 userRouter.put(
   '/profile/edit-password',
-  updatePasswordLimitter(),
+  enterPasswordLimitter(),
   isAuth,
   expressAsyncHandler(async (req, res) => {
     checkPasswordRequirements(req.body.newPassword, res);
@@ -144,6 +144,7 @@ userRouter.post(
 
 userRouter.post(
   '/confirm-password-to-see-user-info',
+  enterPasswordLimitter(),
   isAuth,
   expressAsyncHandler(async (req, res) => {
     const user = await User.findById(req.user._id);
@@ -320,7 +321,7 @@ userRouter.post(
 
 export default userRouter;
 
-function updatePasswordLimitter() {
+function enterPasswordLimitter() {
   const fifteenMinutes = 15 * 60 * 1000;
 
   return limitter({
