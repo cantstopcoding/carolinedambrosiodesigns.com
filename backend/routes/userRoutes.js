@@ -12,6 +12,7 @@ import {
   otpEmailTemplate,
   otpEmailTemplateForForgotPassword,
 } from '../utils.js';
+import limitter from 'express-rate-limit';
 
 const userRouter = express.Router();
 
@@ -35,8 +36,11 @@ userRouter.put(
 
 userRouter.put(
   '/profile/edit-password',
+  enterPasswordLimitter(),
   isAuth,
   expressAsyncHandler(async (req, res) => {
+    checkPasswordRequirements(req.body.newPassword, res);
+
     const user = await User.findById(req.user._id);
 
     if (user) {
@@ -108,7 +112,7 @@ userRouter.post(
   expressAsyncHandler(async (req, res) => {
     const userPersistsPassword = !!req.body.password;
 
-    checkPasswordRequirements();
+    checkPasswordRequirements(req.body.password, res);
 
     if (userPersistsPassword) {
       const newUser = new User({
@@ -135,53 +139,12 @@ userRouter.post(
     } else {
       res.status(400).send({ message: 'Password is required' });
     }
-
-    function checkPasswordRequirements() {
-      if (passwordIsLessThanEightCharacters()) {
-        return res
-          .status(400)
-          .send({ message: 'Password must be at least 8 characters' });
-      }
-
-      if (passwordDoesNotHaveNumber()) {
-        return res
-          .status(400)
-          .send({ message: 'Password must contain at least one number' });
-      }
-
-      if (passwordDoesNotHaveSpecialCharacter()) {
-        return res.status(400).send({
-          message: 'Password must contain at least one special character',
-        });
-      }
-
-      if (passwordDoesNotHaveUpperCase()) {
-        return res
-          .status(400)
-          .send({ message: 'Password must contain at least one uppercase' });
-      }
-    }
-
-    function passwordDoesNotHaveNumber() {
-      return /(?=.*\d)/.test(req.body.password) === false;
-    }
-
-    function passwordDoesNotHaveSpecialCharacter() {
-      return !req.body.password.match(/[^a-zA-Z0-9]/);
-    }
-
-    function passwordDoesNotHaveUpperCase() {
-      return !/[A-Z]/.test(req.body.password);
-    }
-
-    function passwordIsLessThanEightCharacters() {
-      return req.body.password.length < 8;
-    }
   })
 );
 
 userRouter.post(
   '/confirm-password-to-see-user-info',
+  enterPasswordLimitter(),
   isAuth,
   expressAsyncHandler(async (req, res) => {
     const user = await User.findById(req.user._id);
@@ -311,11 +274,13 @@ userRouter.post(
 
 userRouter.put('/forgot-password/update-password', async (req, res) => {
   const user = await User.findOne({ email: req.body.email });
+  checkPasswordRequirements(req.body.newPassword, res);
 
   if (user) {
     if (!req.body.newPassword) {
       return res.status(400).send({ message: 'Password is required' });
     }
+
     user.password = bcrypt.hashSync(req.body.newPassword, 8);
     sendUpdatedUser(user, res);
   } else {
@@ -356,13 +321,72 @@ userRouter.post(
 
 export default userRouter;
 
-async function sendUpdatedUser(user, response) {
-  const updatedUser = await user.save();
-  response.send({
-    _id: updatedUser._id,
-    name: updatedUser.name,
-    email: updatedUser.email,
-    isAdmin: updatedUser.isAdmin,
-    token: generateToken(updatedUser),
+function enterPasswordLimitter() {
+  const fifteenMinutes = 15 * 60 * 1000;
+
+  return limitter({
+    windowMs: fifteenMinutes,
+    max: 5,
+    message: {
+      code: 429,
+      message: 'Too many requests, please try again later',
+    },
   });
+}
+
+async function sendUpdatedUser(user, response) {
+  try {
+    const updatedUser = await user.save();
+    response.send({
+      _id: updatedUser._id,
+      name: updatedUser.name,
+      email: updatedUser.email,
+      isAdmin: updatedUser.isAdmin,
+      token: generateToken(updatedUser),
+    });
+  } catch (error) {
+    console.log('error:', error);
+  }
+}
+
+function checkPasswordRequirements(password, res) {
+  if (passwordIsLessThanEightCharacters(password)) {
+    return res
+      .status(400)
+      .send({ message: 'Password must be at least 8 characters' });
+  }
+
+  if (passwordDoesNotHaveNumber(password)) {
+    return res
+      .status(400)
+      .send({ message: 'Password must contain at least one number' });
+  }
+
+  if (passwordDoesNotHaveSpecialCharacter(password)) {
+    return res.status(400).send({
+      message: 'Password must contain at least one special character',
+    });
+  }
+
+  if (passwordDoesNotHaveUpperCase(password)) {
+    return res
+      .status(400)
+      .send({ message: 'Password must contain at least one uppercase' });
+  }
+}
+
+function passwordDoesNotHaveNumber(password) {
+  return /(?=.*\d)/.test(password) === false;
+}
+
+function passwordDoesNotHaveSpecialCharacter(password) {
+  return !password.match(/[^a-zA-Z0-9]/);
+}
+
+function passwordDoesNotHaveUpperCase(password) {
+  return !/[A-Z]/.test(password);
+}
+
+function passwordIsLessThanEightCharacters(password) {
+  return password.length < 8;
 }
