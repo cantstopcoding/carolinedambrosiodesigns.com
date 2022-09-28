@@ -204,9 +204,11 @@ export default function OrderScreen() {
               <Card.Title>Shipping</Card.Title>
               <Card.Text>
                 <strong>Name:</strong> {order.shippingAddress.fullName} <br />
-                <strong>Address: </strong> {order.shippingAddress.address},
-                {order.shippingAddress.city}, {order.shippingAddress.postalCode}
-                ,{order.shippingAddress.country}
+                <strong>Address: </strong> {order.shippingAddress.address},{' '}
+                {order.shippingAddress.city},{' '}
+                {order.shippingAddress.stateResidence},{' '}
+                {order.shippingAddress.postalCode},{' '}
+                {order.shippingAddress.country}
               </Card.Text>
               {order.isDelivered ? (
                 <MessageBox variant='success'>

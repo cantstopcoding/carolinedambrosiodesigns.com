@@ -19,6 +19,9 @@ export default function ShippingAddressScreen() {
     shippingAddress.postalCode || ''
   );
   const [country, setCountry] = useState(shippingAddress.country || '');
+  const [stateResidence, setStateResidence] = useState(
+    shippingAddress.stateResidence || ''
+  );
 
   useEffect(() => {
     if (!userInfo) {
@@ -34,6 +37,7 @@ export default function ShippingAddressScreen() {
         fullName,
         address,
         city,
+        stateResidence,
         postalCode,
         country,
       },
@@ -45,6 +49,7 @@ export default function ShippingAddressScreen() {
         fullName,
         address,
         city,
+        stateResidence,
         postalCode,
         country,
       })
@@ -83,6 +88,14 @@ export default function ShippingAddressScreen() {
             <Form.Control
               value={city}
               onChange={(e) => setCity(e.target.value)}
+              required
+            />
+          </Form.Group>
+          <Form.Group className='mb-3' controlId='stateResidence'>
+            <Form.Label>State</Form.Label>
+            <Form.Control
+              value={stateResidence}
+              onChange={(e) => setStateResidence(e.target.value)}
               required
             />
           </Form.Group>
