@@ -143,6 +143,7 @@ orderRouter.put(
           {
             from: 'Caroline DAmbrosio Designs <carolinedambrosiodesigns@gmail.com>',
             to: `${order.user.name} <${order.user.email}>`,
+            bcc: 'Caroline <carolinedambrosiodesigns@gmail.com>',
             subject: `New order ${order._id}`,
             html: payOrderEmailTemplate(order),
           },
