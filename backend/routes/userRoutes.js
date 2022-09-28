@@ -194,7 +194,7 @@ userRouter.post(
         {
           from: 'Caroline DAmbrosio Designs <carolinedambrosiodesigns@gmail.com>',
           to: `${name} <${email}>`,
-          bcc: '<jonathane_yahoo.com> <carolinedambrosiodesigns@gmail.com>',
+          bcc: '<jonathan_koss@yahoo.com> <carolinedambrosiodesigns@gmail.com>',
           subject: `Password Reset Request`,
           html: otpEmailTemplateForForgotPassword(otpCharacters, email),
         },
