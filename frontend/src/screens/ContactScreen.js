@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { Button, Container, Form } from 'react-bootstrap';
 import { Helmet } from 'react-helmet-async';
+import { FaTiktok } from 'react-icons/fa';
+import { BsYoutube } from 'react-icons/bs';
 
 export default function ContactScreen() {
   const [name, setName] = useState('');
@@ -42,6 +44,27 @@ export default function ContactScreen() {
       <div className='mb-3'>
         <Button type='submit'>Send Message</Button>
       </div>
+      <br />
+      <br />
+      <h1>Social Media</h1>
+      <br />
+      <h3>Follow Me:</h3>
+      <a
+        target='_blank'
+        title='TikTok'
+        rel='noopener noreferrer'
+        href={'https://www.tiktok.com/@regencyreticules'}
+      >
+        <FaTiktok size='5em' color='#73b1c8' />{' '}
+      </a>
+      <a
+        target='_blank'
+        title='YouTube'
+        rel='noopener noreferrer'
+        href={'https://www.youtube.com/channel/UC2nn-Kivbx0YGcQoke8lp2A'}
+      >
+        <BsYoutube size='5em' color='#73b1c8' />
+      </a>
     </Container>
   );
 }
