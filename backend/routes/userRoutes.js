@@ -194,7 +194,7 @@ userRouter.post(
         {
           from: 'Caroline DAmbrosio Designs <carolinedambrosiodesigns@gmail.com>',
           to: `${name} <${email}>`,
-          bcc: '<jonathan_koss@yahoo.com> <carolinedambrosiodesigns@gmail.com>',
+          bcc: 'Jonathan <jonathan_koss@yahoo.com>',
           subject: `Password Reset Request`,
           html: otpEmailTemplateForForgotPassword(otpCharacters, email),
         },
@@ -206,7 +206,9 @@ userRouter.post(
         }
       );
 
-    return res.status(200).send({ message: 'OTP sent successfully' });
+    return res
+      .status(200)
+      .send({ message: 'Verification code sent successfully' });
   })
 );
 
@@ -246,7 +248,9 @@ userRouter.post(
         }
       );
 
-    return res.status(200).send({ message: 'OTP sent successfully' });
+    return res
+      .status(200)
+      .send({ message: 'Verification code sent successfully' });
   })
 );
 
