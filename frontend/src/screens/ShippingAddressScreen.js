@@ -108,12 +108,14 @@ export default function ShippingAddressScreen() {
             />
           </Form.Group>
           <Form.Group className='mb-3' controlId='country'>
-            <Form.Label>Country</Form.Label>
-            <Form.Control
-              value={country}
-              onChange={(e) => setCountry(e.target.value)}
-              required
-            />
+            <Form.Label>
+              Country (Shipping is only available in the United States at this
+              time)
+            </Form.Label>
+            <Form.Select required onChange={(e) => setCountry(e.target.value)}>
+              <option value={''}>Open this select menu</option>
+              <option value={'United States'}>United States</option>
+            </Form.Select>
           </Form.Group>
           <div className='mb-3'>
             <Button variant='primary' type='submit'>
