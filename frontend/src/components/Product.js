@@ -3,6 +3,7 @@ import Button from 'react-bootstrap/Button';
 import { Link } from 'react-router-dom';
 import Rating from './Rating';
 import axios from 'axios';
+import { toast } from 'react-toastify';
 import { useContext } from 'react';
 import { Store } from '../Store';
 
@@ -25,6 +26,10 @@ function Product(props) {
     ctxDispatch({
       type: 'CART_ADD_ITEM',
       payload: { ...item, quantity },
+      toast: toast.success(`Added to cart`, {
+        autoClose: 400,
+        hideProgressBar: true,
+      }),
     });
   };
 

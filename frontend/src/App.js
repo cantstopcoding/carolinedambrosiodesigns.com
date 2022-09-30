@@ -39,6 +39,7 @@ import Banner from './assets/Banner.jpg';
 import PasswordScreen from './screens/PasswordScreen';
 import UpdateEmailScreen from './screens/UpdateEmailScreen';
 import PasswordForgotScreen from './screens/PasswordForgotScreen';
+import ContactScreen from './screens/ContactScreen';
 
 function App() {
   const { state, dispatch: ctxDispatch } = useContext(Store);
@@ -74,7 +75,7 @@ function App() {
             : 'd-flex flex-column site-container'
         }
       >
-        <ToastContainer position='bottom-center' limit={1} />
+        <ToastContainer position='bottom-center' limit={3} />
         <header>
           <Navbar className='navbar' expand='lg'>
             <Container>
@@ -98,6 +99,9 @@ function App() {
                         {cart.cartItems.reduce((a, c) => a + c.quantity, 0)}
                       </Badge>
                     )}
+                  </Link>
+                  <Link to='/contact' className='nav-link'>
+                    <strong>Contact</strong>
                   </Link>
                   {userInfo ? (
                     <NavDropdown
@@ -183,6 +187,7 @@ function App() {
               <Route path='/search' element={<SearchScreen />} />
               <Route path='/signin' element={<SigninScreen />} />
               <Route path='/signup' element={<SignupScreen />} />
+              <Route path='/contact' element={<ContactScreen />} />
               <Route
                 path='/profile/edit'
                 element={
