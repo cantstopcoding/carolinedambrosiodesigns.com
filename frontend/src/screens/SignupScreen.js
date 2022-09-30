@@ -28,10 +28,10 @@ export default function SignupScreen() {
     if (password) {
       return (
         <>
-          Password must be:
+          Create a password that contains at least:
           <ul>
+            <li>8 characters</li>
             <li>one uppercase letter</li>
-            <li>one lowercase letter</li>
             <li>one number</li>
             <li>one special character e.g., $, !, @, %</li>
           </ul>
