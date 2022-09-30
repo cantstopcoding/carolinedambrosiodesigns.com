@@ -75,7 +75,7 @@ function App() {
             : 'd-flex flex-column site-container'
         }
       >
-        <ToastContainer position='bottom-center' limit={1} />
+        <ToastContainer position='bottom-center' limit={3} />
         <header>
           <Navbar className='navbar' expand='lg'>
             <Container>
