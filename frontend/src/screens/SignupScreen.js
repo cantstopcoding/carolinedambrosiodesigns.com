@@ -23,6 +23,23 @@ export default function SignupScreen() {
 
   const { state, dispatch: ctxDispatch } = useContext(Store);
   const { userInfo } = state;
+
+  function displayPasswordRequirementsFor(password) {
+    if (password) {
+      return (
+        <>
+          Password must be:
+          <ul>
+            <li>one uppercase letter</li>
+            <li>one lowercase letter</li>
+            <li>one number</li>
+            <li>one special character e.g., $, !, @, %</li>
+          </ul>
+        </>
+      );
+    }
+  }
+
   const submitHandler = async (e) => {
     e.preventDefault();
 
@@ -66,7 +83,6 @@ export default function SignupScreen() {
           <Form.Label>Name</Form.Label>
           <Form.Control required onChange={(e) => setName(e.target.value)} />
         </Form.Group>
-
         <Form.Group className='mb-3' controlId='email'>
           <Form.Label>Email</Form.Label>
           <Form.Control
@@ -75,7 +91,6 @@ export default function SignupScreen() {
             onChange={(e) => setEmail(e.target.value)}
           />
         </Form.Group>
-
         <Form.Group className='mb-3' controlId='confirmEmail'>
           <Form.Label>Confirm Email</Form.Label>
           <Form.Control
@@ -84,7 +99,6 @@ export default function SignupScreen() {
             onChange={(e) => setConfirmEmail(e.target.value)}
           />
         </Form.Group>
-
         <Form.Group className='mb-3' controlId='password'>
           <Form.Label>Password</Form.Label>
           <Form.Control
@@ -93,7 +107,14 @@ export default function SignupScreen() {
             onChange={(e) => setPassword(e.target.value)}
           />
         </Form.Group>
-
+        {displayPasswordRequirementsFor(password)}
+        {/* Password must be at least 8 characters long, contain at least:
+        <ul>
+          <li>one uppercase letter</li>
+          <li>one lowercase letter</li>
+          <li>one number</li>
+          <li>one special character e.g., $, !, @, %</li>
+        </ul> */}
         <Form.Group className='mb-3' controlId='confirmPassword'>
           <Form.Label>Confirm Password</Form.Label>
           <Form.Control
