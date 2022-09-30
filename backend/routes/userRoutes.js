@@ -6,6 +6,7 @@ import expressAsyncHandler from 'express-async-handler';
 import User from '../models/userModel.js';
 import Otp from '../models/otpModel.js';
 import {
+  contactEmailTemplate,
   generateToken,
   isAuth,
   mailgun,
@@ -324,6 +325,27 @@ userRouter.post(
     }
   })
 );
+
+userRouter.post('/contact', async (req, res) => {
+  const { name, email, subject, message } = req.body;
+
+  mailgun()
+    .messages()
+    .send(
+      {
+        from: `${name} <${email}>`,
+        to: `<carolinedambrosiodesigns.com >`,
+        subject: `${subject}`,
+        html: contactEmailTemplate(message),
+      },
+      (error, body) => {
+        if (error) {
+          console.log(error);
+        }
+        console.log(body, 'send was successful!');
+      }
+    );
+});
 
 export default userRouter;
 
