@@ -3,11 +3,33 @@ import { Button, Col, Container, Form, Row } from 'react-bootstrap';
 import { Helmet } from 'react-helmet-async';
 import { FaTiktok } from 'react-icons/fa';
 import { BsYoutube } from 'react-icons/bs';
+import axios from 'axios';
+import { toast } from 'react-toastify';
 
 export default function ContactScreen() {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
+  const [subject, setSubject] = useState('');
   const [message, setMessage] = useState('');
+
+  const submitHandler = (e) => {
+    e.preventDefault();
+    try {
+      const { data } = axios.post('/api/users/contact', {
+        name,
+        email,
+        subject,
+        message,
+      });
+      setName('');
+      setEmail('');
+      setSubject('');
+      setMessage('');
+      toast.success('Message sent successfully, we will get back to you soon');
+    } catch (err) {
+      toast.error('Error sending message, please try again later');
+    }
+  };
 
   return (
     <Container>
@@ -25,40 +47,51 @@ export default function ContactScreen() {
       <Row>
         <Col sm={6}>
           <h4>Send Me a Message:</h4>
-          <Form.Group className='mb-3' controlId='name'>
-            <Form.Label>Name</Form.Label>
-            <Form.Control
-              type='name'
-              required
-              onChange={(e) => setName(e.target.value)}
-            />
-          </Form.Group>
-          <Form.Group className='mb-3' controlId='email'>
-            <Form.Label>Email</Form.Label>
-            <Form.Control
-              type='email'
-              required
-              onChange={(e) => setEmail(e.target.value)}
-            />
-          </Form.Group>
-          <Form.Group className='mb-3' controlId='message'>
-            <Form.Label>Message</Form.Label>
-            <Form.Control
-              as='textarea'
-              type='message'
-              rows={10}
-              required
-              onChange={(e) => setMessage(e.target.value)}
-            />
-          </Form.Group>
-          <div className='mb-3'>
-            <Button type='submit'>Send Message</Button>
-          </div>
+          <Form onSubmit={submitHandler}>
+            <Form.Group className='mb-3' controlId='name'>
+              <Form.Label>Name</Form.Label>
+              <Form.Control
+                required
+                type='text'
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+              />
+            </Form.Group>
+            <Form.Group className='mb-3' controlId='email'>
+              <Form.Label>Email</Form.Label>
+              <Form.Control
+                type='email'
+                value={email}
+                required
+                onChange={(e) => setEmail(e.target.value)}
+              />
+            </Form.Group>
+            <Form.Group className='mb-3' controlId='subject'>
+              <Form.Label>Subject</Form.Label>
+              <Form.Control
+                required
+                type='text'
+                value={subject}
+                onChange={(e) => setSubject(e.target.value)}
+              />
+            </Form.Group>
+            <Form.Group className='mb-3' controlId='message'>
+              <Form.Label>Message</Form.Label>
+              <Form.Control
+                as='textarea'
+                value={message}
+                rows={10}
+                required
+                onChange={(e) => setMessage(e.target.value)}
+              />
+            </Form.Group>
+            <div className='mb-3'>
+              <Button type='submit'>Send Message</Button>
+            </div>
+          </Form>
         </Col>
         <Col></Col>
         <Col>
-          {/* <h1>Social Media</h1>
-          <br /> */}
           <h4>Follow Me:</h4>
           <a
             target='_blank'

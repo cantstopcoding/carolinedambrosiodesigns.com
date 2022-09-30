@@ -128,3 +128,7 @@ export const otpEmailTemplateForForgotPassword = (otp, email) => {
   <p>Thanks,</p>
   <p>Caroline</p>`;
 };
+
+export const contactEmailTemplate = (message) => {
+  return `<font size="+1"><pre>${message}</pre></font>`;
+};
