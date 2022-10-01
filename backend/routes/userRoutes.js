@@ -176,7 +176,9 @@ userRouter.post(
 
     const name = user.name;
 
-    const otpCharacters = otpGenerator.generate(6);
+    const otpCharacters = otpGenerator.generate(8, {
+      upperCaseAlphabets: false,
+    });
     console.log('otpCharacters:', otpCharacters);
 
     const email = req.body.email;
@@ -217,7 +219,9 @@ userRouter.post(
   '/email-otp',
   isAuth,
   expressAsyncHandler(async (req, res) => {
-    const otpCharacters = otpGenerator.generate(6);
+    const otpCharacters = otpGenerator.generate(8, {
+      upperCaseAlphabets: false,
+    });
     console.log('otpCharacters:', otpCharacters);
 
     const newEmail = req.body.newEmail;
