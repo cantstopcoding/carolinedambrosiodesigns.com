@@ -116,6 +116,7 @@ export default function ProductForm(props) {
           as='textarea'
           value={props.description}
           onChange={(e) => props.setDescription(e.target.value)}
+          rows={15}
           required
         />
       </Form.Group>
