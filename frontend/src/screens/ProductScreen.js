@@ -202,10 +202,6 @@ function ProductScreen() {
                 ))}
               </Row>
             </ListGroup.Item>
-            <ListGroup.Item>
-              Description:
-              <p>{product.description}</p>
-            </ListGroup.Item>
           </ListGroup>
         </Col>
         <Col md={3}>
@@ -245,7 +241,12 @@ function ProductScreen() {
           </Card>
         </Col>
       </Row>
-      <div className='my-3'></div>
+      <br />
+      <div className='my-3'>
+        <h1>Description</h1>
+        <br />
+        <p id='description-for-paragraph-breaks'>{product.description}</p>
+      </div>
     </div>
   );
 }
