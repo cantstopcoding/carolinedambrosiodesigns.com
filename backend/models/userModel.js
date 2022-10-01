@@ -45,6 +45,6 @@ function checkSpacing() {
 
 function addUniqueValidatorToUserSchema() {
   userSchema.plugin(uniqueValidator, {
-    message: 'Error, expected {PATH} to be unique.',
+    message: 'Error, expected Username "{VALUE}" to be unique.',
   });
 }
