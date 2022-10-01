@@ -334,7 +334,7 @@ userRouter.post('/contact', async (req, res) => {
     .send(
       {
         from: `${name} <${email}>`,
-        to: `<carolinedambrosiodesigns.com >`,
+        to: `<carolinecarolinedambrosiodesigns@gmail.com>`,
         subject: `${subject}`,
         html: contactEmailTemplate(message),
       },
