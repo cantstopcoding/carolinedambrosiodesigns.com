@@ -93,7 +93,7 @@ export default function ContactScreen() {
         <Col md={1}></Col>
         <Col md={5} xs={7}>
           <h4>Email:</h4>
-          <h5>carolinecarolinedambrosiodesigns@gmail.com</h5>
+          <h5>carolinedambrosiodesigns@gmail.com</h5>
           <br />
           <h4>Follow Me:</h4>
           <a
