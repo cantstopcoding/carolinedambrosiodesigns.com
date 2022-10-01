@@ -52,6 +52,21 @@ export default function SignupScreen() {
       toast.error('Passwords do not match');
       return;
     }
+
+    if (name.length < 3) {
+      toast.error('Username must be at least 3 characters');
+      return;
+    }
+
+    if (name.length > 50) {
+      toast.error('Username must be less than 50 characters');
+      return;
+    }
+
+    if (/\s/.test(name)) {
+      toast.error(`Username "${name}" cannot contain spaces`);
+      return;
+    }
     try {
       const { data } = await Axios.post('/api/users/signup', {
         name,
@@ -80,7 +95,7 @@ export default function SignupScreen() {
       <h1 className='my-3'>Sign Up</h1>
       <Form onSubmit={submitHandler}>
         <Form.Group className='mb-3' controlId='name'>
-          <Form.Label>Name</Form.Label>
+          <Form.Label>Username</Form.Label>
           <Form.Control required onChange={(e) => setName(e.target.value)} />
         </Form.Group>
         <Form.Group className='mb-3' controlId='email'>
@@ -108,13 +123,6 @@ export default function SignupScreen() {
           />
         </Form.Group>
         {displayPasswordRequirementsFor(password)}
-        {/* Password must be at least 8 characters long, contain at least:
-        <ul>
-          <li>one uppercase letter</li>
-          <li>one lowercase letter</li>
-          <li>one number</li>
-          <li>one special character e.g., $, !, @, %</li>
-        </ul> */}
         <Form.Group className='mb-3' controlId='confirmPassword'>
           <Form.Label>Confirm Password</Form.Label>
           <Form.Control
