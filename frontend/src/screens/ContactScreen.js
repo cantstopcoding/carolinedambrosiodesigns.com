@@ -37,7 +37,7 @@ export default function ContactScreen() {
         <title>Contact</title>
       </Helmet>
       <Row>
-        <Col sm={5}></Col>
+        <Col md={5}></Col>
         <Col>
           <h1 className='my-3'>Contact</h1>
         </Col>
@@ -45,7 +45,7 @@ export default function ContactScreen() {
       <br />
       <br />
       <Row>
-        <Col sm={6}>
+        <Col md={6} xs={0}>
           <h4>Send Me a Message:</h4>
           <Form onSubmit={submitHandler}>
             <Form.Group className='mb-3' controlId='name'>
@@ -90,8 +90,11 @@ export default function ContactScreen() {
             </div>
           </Form>
         </Col>
-        <Col></Col>
-        <Col>
+        <Col md={1}></Col>
+        <Col md={5} xs={7}>
+          <h4>Email:</h4>
+          <h5>carolinecarolinedambrosiodesigns@gmail.com</h5>
+          <br />
           <h4>Follow Me:</h4>
           <a
             target='_blank'
