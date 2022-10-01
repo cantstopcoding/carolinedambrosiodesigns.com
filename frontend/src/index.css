@@ -113,3 +113,7 @@ button.thumbnail {
   background-color: #5e1717;
   color: #ffffff;
 }
+
+#description-for-paragraph-breaks {
+  white-space: pre-line;
+}
