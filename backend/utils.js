@@ -115,7 +115,7 @@ export const otpEmailTemplate = (otp) => {
   <p>There's one quick step you need to complete in order to confirm your email address.</p>
   <p>Enter the following code in DAmbrosio Designs to confirm your email address.</p>
   <p>Code: <strong>${otp}</strong></p>
-  <p>Verification code expires in 5 minutes.</p>
+  <p>Verification code expires in 10 minutes.</p>
   <p>Thanks,</p>
   <p>Caroline</p>`;
 };
@@ -124,7 +124,7 @@ export const otpEmailTemplateForForgotPassword = (otp, email) => {
   return `<h1>Reset your password?</h1>
   <p>If you requested a password reset for ${email}, use the confirmation code below to complete the process. If you didn't make this request, ignore this email.</p>
   <p>Code: <strong>${otp}</strong></p>
-  <p>Verification code expires in 5 minutes.</p>
+  <p>Verification code expires in 10 minutes.</p>
   <p>Thanks,</p>
   <p>Caroline</p>`;
 };
