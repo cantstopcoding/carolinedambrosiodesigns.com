@@ -45,7 +45,7 @@ export default function ProductForm(props) {
       </Form.Group>
 
       <Form.Group className='mb-3' controlId='additionalImage'>
-        <Form.Label>Additional Images</Form.Label>
+        <Form.Label>Additional Images (Optional)</Form.Label>
         {props.images.length === 0 && <MessageBox>No image</MessageBox>}
         <ListGroup variant='flush'>
           {props.images.map((x) => (
@@ -62,7 +62,7 @@ export default function ProductForm(props) {
         </ListGroup>
       </Form.Group>
       <Form.Group className='mb-3' controlId='additionalImageFile'>
-        <Form.Label>Upload Aditional Image</Form.Label>
+        <Form.Label>Upload Aditional Image (Optional)</Form.Label>
         <Form.Control
           type='file'
           onChange={(e) => props.uploadFileHandler(e, true, false)}
@@ -71,14 +71,14 @@ export default function ProductForm(props) {
       </Form.Group>
 
       <Form.Group className='mb-3' controlId='pdf'>
-        <Form.Label>PDF File</Form.Label>
+        <Form.Label>PDF File (Optional)</Form.Label>
         <Form.Control
           value={props.pdfFile}
           onChange={(e) => props.setPdfFile(e.target.value)}
         />
       </Form.Group>
       <Form.Group className='mb-3' controlId='pdfFile'>
-        <Form.Label>Upload PDF</Form.Label>
+        <Form.Label>Upload PDF (Optional)</Form.Label>
         <Form.Control
           type='file'
           onChange={(e) => props.uploadFileHandler(e, false, true)}
