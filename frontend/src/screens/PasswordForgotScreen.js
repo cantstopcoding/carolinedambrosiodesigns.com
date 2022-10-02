@@ -94,7 +94,10 @@ export default function PasswordForgotScreen(props) {
         <h1>Check your email</h1>
         <p>
           You'll receive a code to verify here so you can reset your account
-          password.
+          password. If you don't see the email, check other places it might be,
+          like your spam, junk, or other folders. It can take a few minutes for
+          the email to arrive. If you still don't see it, try the process again.
+          If you still don't receive an email, contact us.
         </p>
         <Form.Group className='mb-3' controlId='otp'>
           <Form.Label>Verification Code</Form.Label>

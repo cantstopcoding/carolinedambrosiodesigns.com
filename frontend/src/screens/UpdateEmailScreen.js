@@ -158,7 +158,13 @@ export default function UpdateEmailScreen() {
     return (
       <form onSubmit={verifyOtpHandler}>
         <h1>We sent you a code</h1>
-        <p>Enter it below to verify your email.</p>
+        <p>
+          Enter it below to verify your email. If you don't see the email
+          containing it, check other places it might be, like your spam, junk,
+          or other folders. It can take a few minutes for the email to arrive.
+          If you still don't see it, try the process again. If you still don't
+          receive an email, contact us.
+        </p>
         <Form.Group className='mb-3' controlId='otp'>
           <Form.Label>Verification Code</Form.Label>
           <Form.Control
