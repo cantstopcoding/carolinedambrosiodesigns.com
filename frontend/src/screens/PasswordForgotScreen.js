@@ -98,7 +98,11 @@ export default function PasswordForgotScreen(props) {
         </p>
         <Form.Group className='mb-3' controlId='otp'>
           <Form.Label>Verification Code</Form.Label>
-          <Form.Control value={otp} onChange={(e) => setOtp(e.target.value)} />
+          <Form.Control
+            required
+            value={otp}
+            onChange={(e) => setOtp(e.target.value)}
+          />
         </Form.Group>
         <div className='mb-3'>
           <Button type='submit'>Proceed</Button>
@@ -117,6 +121,7 @@ export default function PasswordForgotScreen(props) {
           <Form.Label>Email:</Form.Label>
           <Form.Control
             value={email}
+            required
             type='email'
             onChange={(e) => setEmail(e.target.value)}
           />
@@ -152,6 +157,7 @@ export default function PasswordForgotScreen(props) {
       <Form.Group className='mb-3' controlId='password'>
         <Form.Label>New Password:</Form.Label>
         <Form.Control
+          required
           value={newPassword}
           type='password'
           onChange={(e) => setNewPassword(e.target.value)}
@@ -165,6 +171,7 @@ export default function PasswordForgotScreen(props) {
       <Form.Group className='mb-3' controlId='password'>
         <Form.Label>Confirm Password:</Form.Label>
         <Form.Control
+          required
           value={confirmPassword}
           type='password'
           onChange={(e) => setConfirmPassword(e.target.value)}

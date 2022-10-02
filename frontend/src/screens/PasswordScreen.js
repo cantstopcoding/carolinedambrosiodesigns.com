@@ -83,6 +83,7 @@ export default function PasswordScreen() {
       <Form.Group className='mb-3' controlId='password'>
         <Form.Label>Current Password</Form.Label>
         <Form.Control
+          required
           value={password}
           type='password'
           onChange={(e) => setPassword(e.target.value)}
@@ -97,6 +98,7 @@ export default function PasswordScreen() {
       <Form.Group className='mb-3' controlId='password'>
         <Form.Label>New Password</Form.Label>
         <Form.Control
+          required
           value={newPassword}
           type='password'
           onChange={(e) => setNewPassword(e.target.value)}
@@ -110,6 +112,7 @@ export default function PasswordScreen() {
       <Form.Group className='mb-3' controlId='password'>
         <Form.Label>Confirm Password</Form.Label>
         <Form.Control
+          required
           value={confirmPassword}
           type='password'
           onChange={(e) => setConfirmPassword(e.target.value)}

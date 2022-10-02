@@ -117,6 +117,7 @@ export default function UpdateEmailScreen() {
         <Form.Group className='mb-3' controlId='newEmail'>
           <Form.Label>New Email:</Form.Label>
           <Form.Control
+            required
             value={newEmail}
             type='email'
             onChange={(e) => setNewEmail(e.target.value)}
@@ -139,6 +140,7 @@ export default function UpdateEmailScreen() {
         <Form.Group className='mb-3' controlId='password'>
           <Form.Label>Password:</Form.Label>
           <Form.Control
+            required
             value={password}
             type='password'
             onChange={(e) => setPassword(e.target.value)}
@@ -159,7 +161,11 @@ export default function UpdateEmailScreen() {
         <p>Enter it below to verify your email.</p>
         <Form.Group className='mb-3' controlId='otp'>
           <Form.Label>Verification Code</Form.Label>
-          <Form.Control value={otp} onChange={(e) => setOtp(e.target.value)} />
+          <Form.Control
+            required
+            value={otp}
+            onChange={(e) => setOtp(e.target.value)}
+          />
         </Form.Group>
         <div className='mb-3'>
           <Button type='submit'>Proceed</Button>
