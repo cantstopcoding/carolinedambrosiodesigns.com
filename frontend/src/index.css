@@ -55,6 +55,10 @@ main {
   max-width: 600px;
 }
 
+.contact-screen-container {
+  max-width: 400px;
+}
+
 .checkout-steps > div {
   border-bottom: 0.2rem solid #a0a0a0;
   color: #a0a0a0;
