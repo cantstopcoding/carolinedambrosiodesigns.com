@@ -39,7 +39,7 @@ export default function ProductForm(props) {
         />
       </Form.Group>
       <Form.Group className='mb-3' controlId='imageFile'>
-        <Form.Label>Upload Image</Form.Label>
+        <Form.Label>Upload Image (Optional)</Form.Label>
         <Form.Control type='file' onChange={props.uploadFileHandler} />
         {props.loadingUpload && <LoadingBox></LoadingBox>}
       </Form.Group>
