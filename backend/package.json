@@ -7,7 +7,7 @@
   "scripts": {
     "build": "npm install && cd ../frontend-dambrosio-designs && npm install && npm run build",
     "start": "nodemon server.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "NODE_OPTIONS=--experimental-vm-modules npx jest --runInBand --forceExit"
   },
   "author": "",
   "license": "ISC",
