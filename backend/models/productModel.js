@@ -20,7 +20,7 @@ const productSchema = new mongoose.Schema(
     images: [String],
     pdfFile: { type: String },
     brand: { type: String, required: true },
-    category: { type: String, required: true },
+    category: { type: String, required: true, trim: true },
     description: { type: String, required: true },
     price: { type: Number, required: true },
     countInStock: { type: Number, required: true },
