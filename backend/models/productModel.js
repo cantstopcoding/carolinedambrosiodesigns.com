@@ -15,7 +15,7 @@ const reviewSchema = new mongoose.Schema(
 const productSchema = new mongoose.Schema(
   {
     name: { type: String, required: true, unique: true },
-    slug: { type: String, required: true, unique: true },
+    slug: { type: String, required: true, unique: true, trim: true },
     image: { type: String, required: true },
     images: [String],
     pdfFile: { type: String },
