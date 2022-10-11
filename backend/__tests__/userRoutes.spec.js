@@ -24,39 +24,41 @@ describe('User Signup', () => {
     expect(response.statusCode).toBe(200);
   });
 
-  it('should have password be at least 8 characters', async () => {
-    const response = await postUserWithDifferentPassword('Mikey1!');
+  describe('Check for password requirements', () => {
+    it('should have password be at least 8 characters', async () => {
+      const response = await postUserWithDifferentPassword('Mikey1!');
 
-    expect(response.statusCode).toBe(400);
-    expect(response.body.message).toBe(
-      'Password must be at least 8 characters'
-    );
-  });
+      expect(response.statusCode).toBe(400);
+      expect(response.body.message).toBe(
+        'Password must be at least 8 characters'
+      );
+    });
 
-  it('should have password with at least one number', async () => {
-    const response = await postUserWithDifferentPassword('Mikeymike!');
+    it('should have password with at least one number', async () => {
+      const response = await postUserWithDifferentPassword('Mikeymike!');
 
-    expect(response.statusCode).toBe(400);
-    expect(response.body.message).toBe(
-      'Password must contain at least one number'
-    );
-  });
+      expect(response.statusCode).toBe(400);
+      expect(response.body.message).toBe(
+        'Password must contain at least one number'
+      );
+    });
 
-  it('should have password with at least one uppercase letter', async () => {
-    const response = await postUserWithDifferentPassword('mikeymike1!');
+    it('should have password with at least one uppercase letter', async () => {
+      const response = await postUserWithDifferentPassword('mikeymike1!');
 
-    expect(response.statusCode).toBe(400);
-    expect(response.body.message).toBe(
-      'Password must contain at least one uppercase'
-    );
-  });
+      expect(response.statusCode).toBe(400);
+      expect(response.body.message).toBe(
+        'Password must contain at least one uppercase'
+      );
+    });
 
-  it('should have password with at least one special character', async () => {
-    const response = await postUserWithDifferentPassword('Mikeymike1');
+    it('should have password with at least one special character', async () => {
+      const response = await postUserWithDifferentPassword('Mikeymike1');
 
-    expect(response.statusCode).toBe(400);
-    expect(response.body.message).toBe(
-      'Password must contain at least one special character'
-    );
+      expect(response.statusCode).toBe(400);
+      expect(response.body.message).toBe(
+        'Password must contain at least one special character'
+      );
+    });
   });
 });
