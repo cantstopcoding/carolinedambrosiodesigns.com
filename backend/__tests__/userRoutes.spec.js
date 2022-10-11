@@ -3,10 +3,10 @@ import app from '../server.js';
 import User from '../models/userModel.js';
 
 beforeEach(() => {
-  return User.deleteMany({});
+  return User.deleteMany({ truncate: true });
 });
 
-async function postRequest(password) {
+async function postUserWithDifferentPassword(password) {
   return await request(app).post('/api/users/signup').send({
     name: 'mike',
     email: 'm@m.com',
@@ -25,7 +25,7 @@ describe('User Signup', () => {
   });
 
   it('should have password be at least 8 characters', async () => {
-    const response = await postRequest('Mikey1!');
+    const response = await postUserWithDifferentPassword('Mikey1!');
 
     expect(response.statusCode).toBe(400);
     expect(response.body.message).toBe(
@@ -34,7 +34,7 @@ describe('User Signup', () => {
   });
 
   it('should have password with at least one number', async () => {
-    const response = await postRequest('Mikeymike!');
+    const response = await postUserWithDifferentPassword('Mikeymike!');
 
     expect(response.statusCode).toBe(400);
     expect(response.body.message).toBe(
@@ -43,7 +43,7 @@ describe('User Signup', () => {
   });
 
   it('should have password with at least one uppercase letter', async () => {
-    const response = await postRequest('mikeymike1!');
+    const response = await postUserWithDifferentPassword('mikeymike1!');
 
     expect(response.statusCode).toBe(400);
     expect(response.body.message).toBe(
@@ -52,7 +52,7 @@ describe('User Signup', () => {
   });
 
   it('should have password with at least one special character', async () => {
-    const response = await postRequest('Mikeymike1');
+    const response = await postUserWithDifferentPassword('Mikeymike1');
 
     expect(response.statusCode).toBe(400);
     expect(response.body.message).toBe(
