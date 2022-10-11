@@ -21,7 +21,15 @@ describe('User Signup', () => {
       email: 'm@m.com',
       password: 'Mikeymike1!',
     });
+
     expect(response.statusCode).toBe(200);
+  });
+
+  it('saves the name and email to database', async () => {
+    await postUserWithDifferentPassword('Mikeymike1!');
+    const userList = await User.find();
+
+    expect(userList.length).toBe(1);
   });
 
   describe('Check for password requirements', () => {
