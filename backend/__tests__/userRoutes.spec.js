@@ -3,7 +3,7 @@ import app from '../server.js';
 import User from '../models/userModel.js';
 
 beforeEach(() => {
-  return User.deleteMany({ truncate: true });
+  return User.deleteMany({});
 });
 
 async function postUserAndPasswordIs(password) {
