@@ -6,7 +6,7 @@ beforeEach(() => {
   return User.deleteMany({ truncate: true });
 });
 
-async function postUserWithDifferentPassword(password) {
+async function postUserAndPasswordIs(password) {
   return await request(app).post('/api/users/signup').send({
     name: 'mike',
     email: 'm@m.com',
@@ -26,7 +26,7 @@ describe('User Signup', () => {
   });
 
   it('saves the name and email to database', async () => {
-    await postUserWithDifferentPassword('Mikeymike1!');
+    await postUserAndPasswordIs('Mikeymike1!');
     const userList = await User.find();
 
     expect(userList.length).toBe(1);
@@ -34,7 +34,7 @@ describe('User Signup', () => {
 
   describe('Check for password requirements', () => {
     it('should have password be at least 8 characters', async () => {
-      const response = await postUserWithDifferentPassword('Mikey1!');
+      const response = await postUserAndPasswordIs('Mikey1!');
 
       expect(response.statusCode).toBe(400);
       expect(response.body.message).toBe(
@@ -43,7 +43,7 @@ describe('User Signup', () => {
     });
 
     it('should have password with at least one number', async () => {
-      const response = await postUserWithDifferentPassword('Mikeymike!');
+      const response = await postUserAndPasswordIs('Mikeymike!');
 
       expect(response.statusCode).toBe(400);
       expect(response.body.message).toBe(
@@ -52,7 +52,7 @@ describe('User Signup', () => {
     });
 
     it('should have password with at least one uppercase letter', async () => {
-      const response = await postUserWithDifferentPassword('mikeymike1!');
+      const response = await postUserAndPasswordIs('mikeymike1!');
 
       expect(response.statusCode).toBe(400);
       expect(response.body.message).toBe(
@@ -61,7 +61,7 @@ describe('User Signup', () => {
     });
 
     it('should have password with at least one special character', async () => {
-      const response = await postUserWithDifferentPassword('Mikeymike1');
+      const response = await postUserAndPasswordIs('Mikeymike1');
 
       expect(response.statusCode).toBe(400);
       expect(response.body.message).toBe(
