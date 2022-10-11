@@ -179,7 +179,6 @@ userRouter.post(
     const otpCharacters = otpGenerator.generate(8, {
       upperCaseAlphabets: false,
     });
-    console.log('otpCharacters:', otpCharacters);
 
     const email = req.body.email;
 
@@ -222,7 +221,6 @@ userRouter.post(
     const otpCharacters = otpGenerator.generate(8, {
       upperCaseAlphabets: false,
     });
-    console.log('otpCharacters:', otpCharacters);
 
     const newEmail = req.body.newEmail;
 
