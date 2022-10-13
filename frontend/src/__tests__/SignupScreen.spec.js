@@ -1,7 +1,7 @@
 import { render, screen } from '@testing-library/react';
 import { HelmetProvider } from 'react-helmet-async';
 import { StoreProvider } from '../Store';
-import SignupScreen from './SignupScreen';
+import SignupScreen from '../screens/SignupScreen';
 import { BrowserRouter } from 'react-router-dom';
 
 describe('SignupScreen', () => {
