@@ -1,5 +1,4 @@
 import { render, screen } from '@testing-library/react';
-import React from 'react';
 import { HelmetProvider } from 'react-helmet-async';
 import { StoreProvider } from '../Store';
 import SignupScreen from './SignupScreen';
@@ -8,15 +7,13 @@ import { BrowserRouter } from 'react-router-dom';
 describe('SignupScreen', () => {
   const MockSignupScreen = () => {
     return (
-      <React.StrictMode>
-        <StoreProvider>
-          <HelmetProvider>
-            <BrowserRouter>
-              <SignupScreen />
-            </BrowserRouter>
-          </HelmetProvider>
-        </StoreProvider>
-      </React.StrictMode>
+      <StoreProvider>
+        <HelmetProvider>
+          <BrowserRouter>
+            <SignupScreen />
+          </BrowserRouter>
+        </HelmetProvider>
+      </StoreProvider>
     );
   };
 
