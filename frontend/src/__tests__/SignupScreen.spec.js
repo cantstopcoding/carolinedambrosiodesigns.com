@@ -1,8 +1,12 @@
 import { render, screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import { HelmetProvider } from 'react-helmet-async';
 import { StoreProvider } from '../Store';
 import SignupScreen from '../screens/SignupScreen';
 import { BrowserRouter } from 'react-router-dom';
+import { setupServer } from 'msw/node';
+import { rest } from 'msw';
+import { waitFor } from '@testing-library/dom';
 
 describe('SignupScreen', () => {
   const MockSignupScreen = () => {
@@ -65,6 +69,42 @@ describe('SignupScreen', () => {
       render(<MockSignupScreen />);
       const link = screen.getByRole('link', { name: 'Sign In' });
       expect(link).toBeInTheDocument();
+    });
+  });
+
+  describe('Interactions', () => {
+    it('sends username, email and password to backend after clicking the button', async () => {
+      let requestBody;
+      const server = setupServer(
+        rest.post('/api/users/signup', (req, res, ctx) => {
+          requestBody = req.body;
+          return res(ctx.status(200));
+        })
+      );
+      server.listen();
+      render(<MockSignupScreen />);
+
+      const usernameInput = screen.getByLabelText('Username');
+      const emailInput = screen.getByLabelText('Email');
+      const confirmEmailInput = screen.getByLabelText('Confirm Email');
+      const passwordInput = screen.getByLabelText('Password');
+      const confirmPasswordInput = screen.getByLabelText('Confirm Password');
+      const button = screen.getByRole('button', { name: 'Sign Up' });
+
+      userEvent.type(usernameInput, 'user1');
+      userEvent.type(emailInput, 'user1@mail.com');
+      userEvent.type(confirmEmailInput, 'user1@mail.com');
+      userEvent.type(passwordInput, 'P4ssword');
+      userEvent.type(confirmPasswordInput, 'P4ssword');
+      userEvent.click(button);
+
+      await waitFor(() => {
+        expect(requestBody).toEqual({
+          name: 'user1',
+          email: 'user1@mail.com',
+          password: 'P4ssword',
+        });
+      });
     });
   });
 });
