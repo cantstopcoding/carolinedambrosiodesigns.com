@@ -16,5 +16,8 @@
   "dependencies": {
     "file-saver": "^2.0.5",
     "react-icons": "^4.4.0"
+  },
+  "devDependencies": {
+    "msw": "^0.47.4"
   }
 }
