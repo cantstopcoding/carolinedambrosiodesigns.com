@@ -7,6 +7,7 @@ import { BrowserRouter } from 'react-router-dom';
 import { setupServer } from 'msw/node';
 import { rest } from 'msw';
 import { waitFor } from '@testing-library/dom';
+import { ToastContainer } from 'react-toastify';
 
 describe('SignupScreen', () => {
   const MockSignupScreen = () => {
@@ -14,12 +15,32 @@ describe('SignupScreen', () => {
       <StoreProvider>
         <HelmetProvider>
           <BrowserRouter>
+            <ToastContainer position='bottom-center' limit={3} />
             <SignupScreen />
           </BrowserRouter>
         </HelmetProvider>
       </StoreProvider>
     );
   };
+
+  function setUpInputAndRender(MockSignupScreen) {
+    render(<MockSignupScreen />);
+
+    const usernameInput = screen.getByLabelText('Username');
+    const emailInput = screen.getByLabelText('Email');
+    const confirmEmailInput = screen.getByLabelText('Confirm Email');
+    const passwordInput = screen.getByLabelText('Password');
+    const confirmPasswordInput = screen.getByLabelText('Confirm Password');
+    const button = screen.getByRole('button', { name: 'Sign Up' });
+    return {
+      usernameInput,
+      emailInput,
+      confirmEmailInput,
+      passwordInput,
+      confirmPasswordInput,
+      button,
+    };
+  }
 
   describe('Layout', () => {
     it('has a header', async () => {
@@ -82,14 +103,14 @@ describe('SignupScreen', () => {
         })
       );
       server.listen();
-      render(<MockSignupScreen />);
-
-      const usernameInput = screen.getByLabelText('Username');
-      const emailInput = screen.getByLabelText('Email');
-      const confirmEmailInput = screen.getByLabelText('Confirm Email');
-      const passwordInput = screen.getByLabelText('Password');
-      const confirmPasswordInput = screen.getByLabelText('Confirm Password');
-      const button = screen.getByRole('button', { name: 'Sign Up' });
+      const {
+        usernameInput,
+        emailInput,
+        confirmEmailInput,
+        passwordInput,
+        confirmPasswordInput,
+        button,
+      } = setUpInputAndRender(MockSignupScreen);
 
       userEvent.type(usernameInput, 'user1');
       userEvent.type(emailInput, 'user1@mail.com');
@@ -104,6 +125,34 @@ describe('SignupScreen', () => {
           email: 'user1@mail.com',
           password: 'P4ssword',
         });
+      });
+    });
+
+    it('notifies user that passwords do not match', async () => {
+      const server = setupServer(
+        rest.post('/api/users/signup', (req, res, ctx) => {
+          return res(ctx.status(200));
+        })
+      );
+      server.listen();
+      const {
+        usernameInput,
+        emailInput,
+        confirmEmailInput,
+        passwordInput,
+        confirmPasswordInput,
+        button,
+      } = setUpInputAndRender(MockSignupScreen);
+
+      userEvent.type(usernameInput, 'user1');
+      userEvent.type(emailInput, 'user1@mail.com');
+      userEvent.type(confirmEmailInput, 'user1@mail.com');
+      userEvent.type(passwordInput, 'P4ssword');
+      userEvent.type(confirmPasswordInput, 'P4sswor');
+      userEvent.click(button);
+
+      await waitFor(() => {
+        expect(screen.getByText('Passwords do not match')).toBeInTheDocument();
       });
     });
   });
