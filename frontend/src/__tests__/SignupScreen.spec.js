@@ -155,5 +155,24 @@ describe('SignupScreen', () => {
         expect(screen.getByText('Passwords do not match')).toBeInTheDocument();
       });
     });
+
+    it('notifies user that emails do not match', async () => {
+      const server = setupServer(
+        rest.post('/api/users/signup', (req, res, ctx) => {
+          return res(ctx.status(200));
+        })
+      );
+      server.listen();
+      const { emailInput, confirmEmailInput, button } =
+        setUpInputAndRender(MockSignupScreen);
+
+      userEvent.type(emailInput, 'user1@mail.com');
+      userEvent.type(confirmEmailInput, 'user2@mail.com');
+      userEvent.click(button);
+
+      await waitFor(() => {
+        expect(screen.getByText('Emails do not match')).toBeInTheDocument();
+      });
+    });
   });
 });
