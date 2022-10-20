@@ -165,5 +165,27 @@ describe('SignupScreen', () => {
         expect(screen.getByText('Emails do not match')).toBeInTheDocument();
       });
     });
+
+    it('notifies user that username is too long', async () => {
+      const server = setupServer(
+        rest.post('/api/users/signup', (req, res, ctx) => {
+          return res(ctx.status(200));
+        })
+      );
+      server.listen();
+      const { usernameInput, button } = setUpInputAndRender(MockSignupScreen);
+
+      userEvent.type(
+        usernameInput,
+        'user1user1user1user1user1user1user1user1user1user1user1'
+      );
+      userEvent.click(button);
+
+      await waitFor(() => {
+        expect(
+          screen.getByText('Username must be less than 50 characters')
+        ).toBeInTheDocument();
+      });
+    });
   });
 });
