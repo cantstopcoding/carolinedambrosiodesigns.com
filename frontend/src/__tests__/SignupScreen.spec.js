@@ -135,18 +135,9 @@ describe('SignupScreen', () => {
         })
       );
       server.listen();
-      const {
-        usernameInput,
-        emailInput,
-        confirmEmailInput,
-        passwordInput,
-        confirmPasswordInput,
-        button,
-      } = setUpInputAndRender(MockSignupScreen);
+      const { passwordInput, confirmPasswordInput, button } =
+        setUpInputAndRender(MockSignupScreen);
 
-      userEvent.type(usernameInput, 'user1');
-      userEvent.type(emailInput, 'user1@mail.com');
-      userEvent.type(confirmEmailInput, 'user1@mail.com');
       userEvent.type(passwordInput, 'P4ssword');
       userEvent.type(confirmPasswordInput, 'P4sswor');
       userEvent.click(button);
