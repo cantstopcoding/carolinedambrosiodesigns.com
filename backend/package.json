@@ -7,7 +7,7 @@
   "scripts": {
     "build": "npm install && cd ../frontend-dambrosio-designs && npm install && npm run build",
     "start": "nodemon server.js",
-    "test": "NODE_OPTIONS=--experimental-vm-modules npx jest --runInBand --forceExit"
+    "test": "NODE_OPTIONS=--experimental-vm-modules npx jest --detectOpenHandles  --watchAll "
   },
   "author": "",
   "license": "ISC",
@@ -28,6 +28,8 @@
     "streamifier": "^0.1.1"
   },
   "devDependencies": {
-    "nodemon": "^2.0.16"
+    "jest": "^29.2.1",
+    "nodemon": "^2.0.16",
+    "supertest": "^6.3.0"
   }
 }
