@@ -141,7 +141,8 @@ describe('SignupScreen', () => {
       userEvent.click(button);
 
       await waitFor(() => {
-        expect(screen.getByText('Passwords do not match')).toBeInTheDocument();
+        const validationError = screen.getByText('Passwords do not match');
+        expect(validationError).toBeInTheDocument();
       });
     });
 
@@ -154,7 +155,8 @@ describe('SignupScreen', () => {
       userEvent.click(button);
 
       await waitFor(() => {
-        expect(screen.getByText('Emails do not match')).toBeInTheDocument();
+        const validationError = screen.getByText('Emails do not match');
+        expect(validationError).toBeInTheDocument();
       });
     });
 
@@ -168,9 +170,10 @@ describe('SignupScreen', () => {
       userEvent.click(button);
 
       await waitFor(() => {
-        expect(
-          screen.getByText('Username must be less than 50 characters')
-        ).toBeInTheDocument();
+        const validationError = screen.getByText(
+          'Username must be less than 50 characters'
+        );
+        expect(validationError).toBeInTheDocument();
       });
     });
   });
