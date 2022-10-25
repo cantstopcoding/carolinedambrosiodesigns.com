@@ -94,15 +94,19 @@ describe('SignupScreen', () => {
   });
 
   describe('Interactions', () => {
+    let requestBody;
+    const server = setupServer(
+      rest.post('/api/users/signup', (req, res, ctx) => {
+        requestBody = req.body;
+        return res(ctx.status(200));
+      })
+    );
+
+    beforeAll(() => server.listen());
+
+    afterAll(() => server.close());
+
     it('sends username, email and password to backend after clicking the button', async () => {
-      let requestBody;
-      const server = setupServer(
-        rest.post('/api/users/signup', (req, res, ctx) => {
-          requestBody = req.body;
-          return res(ctx.status(200));
-        })
-      );
-      server.listen();
       const {
         usernameInput,
         emailInput,
@@ -129,12 +133,6 @@ describe('SignupScreen', () => {
     });
 
     it('notifies user that passwords do not match', async () => {
-      const server = setupServer(
-        rest.post('/api/users/signup', (req, res, ctx) => {
-          return res(ctx.status(200));
-        })
-      );
-      server.listen();
       const { passwordInput, confirmPasswordInput, button } =
         setUpInputAndRender(MockSignupScreen);
 
@@ -148,12 +146,6 @@ describe('SignupScreen', () => {
     });
 
     it('notifies user that emails do not match', async () => {
-      const server = setupServer(
-        rest.post('/api/users/signup', (req, res, ctx) => {
-          return res(ctx.status(200));
-        })
-      );
-      server.listen();
       const { emailInput, confirmEmailInput, button } =
         setUpInputAndRender(MockSignupScreen);
 
@@ -167,12 +159,6 @@ describe('SignupScreen', () => {
     });
 
     it('notifies user that username is too long', async () => {
-      const server = setupServer(
-        rest.post('/api/users/signup', (req, res, ctx) => {
-          return res(ctx.status(200));
-        })
-      );
-      server.listen();
       const { usernameInput, button } = setUpInputAndRender(MockSignupScreen);
 
       userEvent.type(
