@@ -176,5 +176,19 @@ describe('SignupScreen', () => {
         expect(validationError).toBeInTheDocument();
       });
     });
+
+    it('notifies user that username cannot have spaces', async () => {
+      const { usernameInput, button } = setUpInputAndRender(MockSignupScreen);
+
+      userEvent.type(usernameInput, 'user 1');
+      userEvent.click(button);
+
+      await waitFor(() => {
+        const validationError = screen.getByText(
+          'Username "user 1" cannot contain spaces'
+        );
+        expect(validationError).toBeInTheDocument();
+      });
+    });
   });
 });
