@@ -54,7 +54,7 @@ describe('User Signup', () => {
   });
 
   describe('Check for password requirements', () => {
-    it.each`
+    test.each`
       password         | expectedMessage
       ${'Mikey1!'}     | ${'Password must be at least 8 characters'}
       ${'Mikeymike!'}  | ${'Password must contain at least one number'}
