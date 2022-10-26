@@ -52,11 +52,7 @@ describe('User Signup', () => {
     `(
       'returns $expectedMessage when password is invalid',
       async ({ password, expectedMessage }) => {
-        const response = await request(app).post('/api/users/signup').send({
-          name: 'mike',
-          email: 'm@m.com',
-          password: password,
-        });
+        const response = await postUserAndPasswordIs(password);
 
         expect(response.statusCode).toBe(400);
         expect(response.body.message).toBe(expectedMessage);
@@ -69,7 +65,6 @@ describe('User Signup', () => {
         email: 'm@m.com',
         password: 'Mikeymike1!',
       });
-      expect(response.statusCode).toBe(400);
       expect(response.body.message).toBe(
         'User validation failed: name: Name must be at least 3 characters long'
       );
