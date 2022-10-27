@@ -43,6 +43,12 @@ describe('SignupScreen', () => {
   }
 
   describe('Layout', () => {
+    const expectInputToBeInDocument = (labelText) => {
+      render(<MockSignupScreen />);
+      const input = screen.getByLabelText(labelText);
+      expect(input).toBeInTheDocument();
+    };
+
     it('has a header', async () => {
       render(<MockSignupScreen />);
       screen.getByRole('heading', { name: 'Sign Up' });
@@ -67,12 +73,6 @@ describe('SignupScreen', () => {
     it('has confirm password input', () => {
       expectInputToBeInDocument('Confirm Password');
     });
-
-    function expectInputToBeInDocument(labelText) {
-      render(<MockSignupScreen />);
-      const input = screen.getByLabelText(labelText);
-      expect(input).toBeInTheDocument();
-    }
 
     it('has sign up button', () => {
       render(<MockSignupScreen />);
