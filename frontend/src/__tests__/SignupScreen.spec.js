@@ -163,10 +163,7 @@ describe('SignupScreen', () => {
     it('notifies user that username is too long', async () => {
       const { usernameInput, button } = setUpInputAndRender(MockSignupScreen);
 
-      userEvent.type(
-        usernameInput,
-        'user1user1user1user1user1user1user1user1user1user1user1'
-      );
+      userEvent.type(usernameInput, 'u'.repeat(51));
       userEvent.click(button);
 
       await waitFor(() => {
