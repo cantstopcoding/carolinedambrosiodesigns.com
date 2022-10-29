@@ -42,17 +42,25 @@ describe('User Signup', () => {
     expect(savedUser.password).not.toBe('Mikeymike1!');
   });
 
-  describe('User validation errors, that is not password validation', () => {
-    it('should return error message if at least 3 characters long', async () => {
-      const response = await request(app).post('/api/users/signup').send({
-        name: 'mi',
-        email: 'm@m.com',
-        password: 'Mikeymike1!',
-      });
-      expect(response.body.message).toBe(
-        'User validation failed: name: Name must be at least 3 characters long'
-      );
-    });
+  describe('User validation errors for username', () => {
+    it.each`
+      name              | expectedMessage
+      ${'mi'}           | ${'User validation failed: name: Name must be at least 3 characters long'}
+      ${'mi ke'}        | ${'User validation failed: name: "mi ke" cannot contain spaces'}
+      ${'m'.repeat(51)} | ${'User validation failed: name: Name can be no longer than 50 characters long'}
+    `(
+      'returns $expectedMessage when name is invalid',
+      async ({ name, expectedMessage }) => {
+        const response = await request(app).post('/api/users/signup').send({
+          name: name,
+          email: 'm@m.com',
+          password: 'Mikeymike1!',
+        });
+
+        expect(response.statusCode).toBe(500);
+        expect(response.body.message).toBe(expectedMessage);
+      }
+    );
   });
 
   describe('Check for password requirements', () => {
