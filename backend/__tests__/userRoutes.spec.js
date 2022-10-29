@@ -61,6 +61,20 @@ describe('User Signup', () => {
         expect(response.body.message).toBe(expectedMessage);
       }
     );
+
+    it('returns error message when name is not unique', async () => {
+      await postUserAndPasswordIs('Mikeymike1!');
+      const secondResponse = await request(app).post('/api/users/signup').send({
+        name: 'mike',
+        email: 'mike@mike.com',
+        password: 'P4ssword!',
+      });
+
+      expect(secondResponse.statusCode).toBe(500);
+      expect(secondResponse.body.message).toBe(
+        'User validation failed: name: Error, expected Username "mike" to be unique.'
+      );
+    });
   });
 
   describe('Check for password requirements', () => {
