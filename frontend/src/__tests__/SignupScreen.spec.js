@@ -54,24 +54,15 @@ describe('SignupScreen', () => {
       screen.getByRole('heading', { name: 'Sign Up' });
     });
 
-    it('has username input', () => {
-      expectInputToBeInDocument('Username');
-    });
-
-    it('has email input', () => {
-      expectInputToBeInDocument('Email');
-    });
-
-    it('has confirm email input', () => {
-      expectInputToBeInDocument('Confirm Email');
-    });
-
-    it('has password input', () => {
-      expectInputToBeInDocument('Password');
-    });
-
-    it('has confirm password input', () => {
-      expectInputToBeInDocument('Confirm Password');
+    it.each`
+      field
+      ${'Username'}
+      ${'Email'}
+      ${'Confirm Email'}
+      ${'Password'}
+      ${'Confirm Password'}
+    `('has $field input', ({ field }) => {
+      expectInputToBeInDocument(field);
     });
 
     it('has sign up button', () => {
