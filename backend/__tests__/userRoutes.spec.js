@@ -19,6 +19,24 @@ async function postUserAndPasswordIs(password) {
 }
 
 describe('User Signup', () => {
+  describe('Check for password requirements', () => {
+    test.each`
+      password         | expectedMessage
+      ${'Mikey1!'}     | ${'Password must be at least 8 characters'}
+      ${'Mikeymike!'}  | ${'Password must contain at least one number'}
+      ${'mikeymike1!'} | ${'Password must contain at least one uppercase'}
+      ${'Mikeymike1'}  | ${'Password must contain at least one special character'}
+    `(
+      'returns $expectedMessage when password is invalid',
+      async ({ password, expectedMessage }) => {
+        const response = await postUserAndPasswordIs(password);
+
+        expect(response.statusCode).toBe(400);
+        expect(response.body.message).toBe(expectedMessage);
+      }
+    );
+  });
+
   it('should respond with 200 status code with correct credenntials', async () => {
     const response = await request(app).post('/api/users/signup').send({
       name: 'mike',
@@ -75,23 +93,5 @@ describe('User Signup', () => {
         'User validation failed: name: Error, expected Username "mike" to be unique.'
       );
     });
-  });
-
-  describe('Check for password requirements', () => {
-    test.each`
-      password         | expectedMessage
-      ${'Mikey1!'}     | ${'Password must be at least 8 characters'}
-      ${'Mikeymike!'}  | ${'Password must contain at least one number'}
-      ${'mikeymike1!'} | ${'Password must contain at least one uppercase'}
-      ${'Mikeymike1'}  | ${'Password must contain at least one special character'}
-    `(
-      'returns $expectedMessage when password is invalid',
-      async ({ password, expectedMessage }) => {
-        const response = await postUserAndPasswordIs(password);
-
-        expect(response.statusCode).toBe(400);
-        expect(response.body.message).toBe(expectedMessage);
-      }
-    );
   });
 });
