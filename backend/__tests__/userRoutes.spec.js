@@ -47,6 +47,15 @@ describe('User Signup', () => {
     expect(response.statusCode).toBe(200);
   });
 
+  it('should set user to admin status if the email equals the email in the .env file', async () => {
+    process.env.ADMIN_EMAIL = 'm@m.com';
+
+    const response = await postUserAndPasswordIs('Mikeymike1!');
+
+    const userIsAdmin = response.body.isAdmin;
+    expect(userIsAdmin).toBe(true);
+  });
+
   it('saves the name and email to database', async () => {
     await postUserAndPasswordIs('Mikeymike1!');
     const userList = await User.find();
