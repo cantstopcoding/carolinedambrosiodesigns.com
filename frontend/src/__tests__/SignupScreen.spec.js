@@ -123,6 +123,43 @@ describe('SignupScreen', () => {
       });
     });
 
+    it('displays a Toast error from the backend', async () => {
+      server.use(
+        rest.post('/api/users/signup', async (req, res, ctx) => {
+          return res(
+            ctx.status(400),
+            ctx.json({
+              message: 'Password must be at least 8 characters',
+            })
+          );
+        })
+      );
+
+      const {
+        usernameInput,
+        emailInput,
+        passwordInput,
+        confirmEmailInput,
+        confirmPasswordInput,
+        button,
+      } = setUpInputAndRender(MockSignupScreen);
+
+      userEvent.type(usernameInput, 'user1');
+      userEvent.type(emailInput, 'user1@mail.com');
+      userEvent.type(confirmEmailInput, 'user1@mail.com');
+      userEvent.type(passwordInput, 'P4sswor');
+      userEvent.type(confirmPasswordInput, 'P4sswor');
+      userEvent.click(button);
+
+      const toastRole = await screen.findByRole('alert');
+      const validationErrorText = await screen.findByText(
+        'Password must be at least 8 characters'
+      );
+
+      expect(toastRole).toBeInTheDocument();
+      expect(validationErrorText).toBeInTheDocument();
+    });
+
     it('notifies user that passwords do not match', async () => {
       const { passwordInput, confirmPasswordInput, button } =
         setUpInputAndRender(MockSignupScreen);
