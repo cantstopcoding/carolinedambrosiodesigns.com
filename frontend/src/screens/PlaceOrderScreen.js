@@ -63,6 +63,10 @@ export default function PlaceOrderScreen() {
   cart.shippingItemsPrice = shippingItemsPriceCalculation();
 
   const shippingPriceCalculation = () => {
+    if (cart.cartItems.every((item) => item.pdfFile)) {
+      return round2(0);
+    }
+
     if (cart.shippingItemsPrice > 100) {
       return round2(0);
     } else {
