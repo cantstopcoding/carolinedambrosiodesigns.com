@@ -40,7 +40,37 @@ export default function PlaceOrderScreen() {
   cart.itemsPrice = round2(
     cart.cartItems.reduce((a, c) => a + c.quantity * c.price, 0)
   );
-  cart.shippingPrice = cart.itemsPrice > 100 ? round2(0) : round2(10);
+
+  const shippingItemsPriceCalculation = () => {
+    return round2(
+      collectShippingItems().reduce((a, c) => a + c.quantity * c.price, 0)
+    );
+  };
+
+  function collectShippingItems() {
+    return (
+      cart.cartItems
+        // eslint-disable-next-line array-callback-return
+        .map((item) => {
+          if (!item.pdfFile) {
+            return item;
+          }
+        })
+        .filter(Boolean)
+    );
+  }
+
+  cart.shippingItemsPrice = shippingItemsPriceCalculation();
+
+  const shippingPriceCalculation = () => {
+    if (cart.shippingItemsPrice > 100) {
+      return round2(0);
+    } else {
+      return round2(10);
+    }
+  };
+
+  cart.shippingPrice = shippingPriceCalculation();
   cart.taxPrice = round2(0.06 * cart.itemsPrice);
   cart.totalPrice = cart.itemsPrice + cart.shippingPrice + cart.taxPrice;
 
@@ -157,6 +187,7 @@ export default function PlaceOrderScreen() {
                   <Row>
                     <Col>Shipping</Col>
                     <Col>${cart.shippingPrice.toFixed(2)}</Col>
+                    {/* If the item is a pdf then don't apply shipping price */}
                   </Row>
                 </ListGroup.Item>
                 <ListGroup.Item>
