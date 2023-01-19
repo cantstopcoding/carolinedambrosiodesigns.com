@@ -63,7 +63,7 @@ export default function PlaceOrderScreen() {
   cart.shippingItemsPrice = shippingItemsPriceCalculation();
 
   const shippingPriceCalculation = () => {
-    if (cart.cartItems.every((item) => item.pdfFile)) {
+    if (everyItemIsPdf()) {
       return round2(0);
     }
 
@@ -73,6 +73,8 @@ export default function PlaceOrderScreen() {
       return round2(10);
     }
   };
+
+  const everyItemIsPdf = () => cart.cartItems.every((item) => item.pdfFile);
 
   cart.shippingPrice = shippingPriceCalculation();
   cart.taxPrice = round2(0.06 * cart.itemsPrice);
