@@ -14,6 +14,7 @@ const orderSchema = new mongoose.Schema(
           ref: 'Product',
           required: true,
         },
+        pdfFile: { type: String },
       },
     ],
     shippingAddress: {
