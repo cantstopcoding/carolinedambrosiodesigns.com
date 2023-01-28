@@ -249,9 +249,7 @@ export default function OrderScreen() {
                           className='img-fluid rounded img-thumbnail'
                         ></img>{' '}
                         <Link to={`/product/${item.slug}`}>{item.name}</Link>{' '}
-                        {item.pdfFile && (
-                          <Button variant='primary'>Download</Button>
-                        )}
+                        {displayDownloadButtonIfItemIsPdf(item)}
                       </Col>
                       <Col md={3}>
                         <span>{item.quantity}</span>
@@ -330,4 +328,8 @@ export default function OrderScreen() {
       </Row>
     </div>
   );
+
+  function displayDownloadButtonIfItemIsPdf(item) {
+    return item.pdfFile && <Button variant='primary'>Download</Button>;
+  }
 }
