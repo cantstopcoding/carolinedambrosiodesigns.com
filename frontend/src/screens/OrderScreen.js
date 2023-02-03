@@ -14,6 +14,7 @@ import { Store } from '../Store';
 import { getError } from '../utils';
 import { toast } from 'react-toastify';
 import Button from 'react-bootstrap/Button';
+import { saveAs } from 'file-saver';
 
 function reducer(state, action) {
   switch (action.type) {
@@ -330,8 +331,17 @@ export default function OrderScreen() {
   );
 
   function displayDownloadButtonForBoughtPdf(item, order) {
+    function saveFile() {
+      const slugifyProductName = item.name.replace(/\s+/g, '-').toLowerCase();
+      saveAs(item.pdfFile, `${slugifyProductName}.pdf`);
+    }
+
     if (order.isPaid && item.pdfFile) {
-      return <Button variant='primary'>Download</Button>;
+      return (
+        <Button variant='primary' onClick={saveFile}>
+          Download
+        </Button>
+      );
     }
   }
 }
